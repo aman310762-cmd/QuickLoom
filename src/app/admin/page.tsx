@@ -2,23 +2,33 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { getAdminStats, getAllBookings, getAllProducts, getProductById } from '@/lib/data/store';
+import { fetchAdminStats, fetchAllBookings, fetchAllProducts, fetchProductById } from '@/lib/api';
 import { Booking, Product } from '@/lib/types';
 import { exportProductsToExcel, exportBookingsToExcel, exportInventoryToExcel, exportFullReportToExcel } from '@/lib/exportExcel';
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState<ReturnType<typeof getAdminStats> | null>(null);
+  const [stats, setStats] = useState<Record<string, number> | null>(null);
   const [recentBookings, setRecentBookings] = useState<Booking[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
+  const [allBookings, setAllBookings] = useState<Booking[]>([]);
   const [currentTime, setCurrentTime] = useState('');
 
   useEffect(() => {
-    setStats(getAdminStats());
-    setRecentBookings(getAllBookings().slice(-5).reverse());
-    setProducts(getAllProducts());
-    setCurrentTime(new Date().toLocaleDateString('en-IN', {
-      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-    }));
+    const load = async () => {
+      const [s, b, p] = await Promise.all([
+        fetchAdminStats(),
+        fetchAllBookings(),
+        fetchAllProducts(),
+      ]);
+      setStats(s);
+      setAllBookings(b);
+      setRecentBookings(b.slice(0, 5));
+      setProducts(p);
+      setCurrentTime(new Date().toLocaleDateString('en-IN', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+      }));
+    };
+    load();
   }, []);
 
   if (!stats) return null;
@@ -78,7 +88,16 @@ export default function AdminDashboard() {
           </Link>
           <button
             className="btn btn-sm"
-            onClick={() => exportFullReportToExcel(products, getAllBookings(), getProductById)}
+            onClick={async () => {
+              const bookings = await fetchAllBookings();
+              const getProduct = async (id: string) => {
+                const p = products.find(pr => pr.id === id);
+                return p || (await fetchProductById(id)) || undefined;
+              };
+              // Build a sync lookup for the export function
+              const lookup = (id: string) => products.find(p => p.id === id);
+              exportFullReportToExcel(products, bookings, lookup);
+            }}
             style={{ background: '#10B981', color: 'white', border: 'none' }}
           >
             <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>download</span>
@@ -143,7 +162,11 @@ export default function AdminDashboard() {
           </div>
           <div className="action-label">Export Products</div>
         </button>
-        <button className="admin-quick-action" onClick={() => exportBookingsToExcel(getAllBookings(), getProductById)}>
+        <button className="admin-quick-action" onClick={async () => {
+          const bookings = await fetchAllBookings();
+          const lookup = (id: string) => products.find(p => p.id === id);
+          exportBookingsToExcel(bookings, lookup);
+        }}>
           <div className="action-icon" style={{ background: 'rgba(236,72,153,0.08)' }}>
             <span className="material-symbols-outlined" style={{ color: '#EC4899' }}>receipt</span>
           </div>

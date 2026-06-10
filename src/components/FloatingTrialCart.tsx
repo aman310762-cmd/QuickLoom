@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { getCartCount } from '@/lib/data/store';
+import { getCartCount } from '@/lib/api';
 
 export function FloatingTrialCart() {
   const pathname = usePathname();

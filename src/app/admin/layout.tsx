@@ -3,7 +3,14 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { isAdminLoggedIn, adminLogout } from '@/lib/data/store';
+
+function isAdminLoggedIn() {
+  if (typeof window === 'undefined') return false;
+  return localStorage.getItem('ql_admin') === 'true';
+}
+function adminLogout() {
+  localStorage.removeItem('ql_admin');
+}
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();

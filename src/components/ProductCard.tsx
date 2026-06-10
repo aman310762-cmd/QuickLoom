@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Product } from '@/lib/types';
-import { addToCart, isInCart, removeFromCart } from '@/lib/data/store';
+import { addToCart, isInCart, removeFromCart } from '@/lib/api';
 import { useState, useEffect } from 'react';
 
 export function ProductCard({ product }: { product: Product }) {

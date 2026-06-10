@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { CATEGORIES } from '@/lib/types';
-import { getVisibleProducts } from '@/lib/data/store';
+import { fetchVisibleProducts } from '@/lib/api';
 import { useEffect, useState } from 'react';
 
 const CATEGORY_IMAGES: Record<string, string> = {
@@ -47,12 +47,15 @@ export default function HomePage() {
 
   useEffect(() => {
     setMounted(true);
-    const products = getVisibleProducts();
-    const counts: Record<string, number> = {};
-    CATEGORIES.forEach(cat => {
-      counts[cat.slug] = products.filter(p => p.category === cat.slug).length;
-    });
-    setProductCounts(counts);
+    const load = async () => {
+      const products = await fetchVisibleProducts();
+      const counts: Record<string, number> = {};
+      CATEGORIES.forEach(cat => {
+        counts[cat.slug] = products.filter(p => p.category === cat.slug).length;
+      });
+      setProductCounts(counts);
+    };
+    load();
   }, []);
 
   // Show first 6 categories on home page

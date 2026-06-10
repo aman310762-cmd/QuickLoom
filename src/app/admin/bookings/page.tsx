@@ -1,20 +1,30 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getAllBookings, updateBookingStatus, updateBookingItemStatus, getProductById } from '@/lib/data/store';
-import { Booking, BookingStatus, BookingItemStatus } from '@/lib/types';
+import { fetchAllBookings, fetchAllProducts, updateBookingStatus as apiUpdateBookingStatus, updateBookingItemStatus as apiUpdateBookingItemStatus } from '@/lib/api';
+import { Booking, BookingStatus, BookingItemStatus, Product } from '@/lib/types';
 import { exportBookingsToExcel } from '@/lib/exportExcel';
 
 export default function AdminBookingsPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [filter, setFilter] = useState('');
   const [expanded, setExpanded] = useState<string | null>(null);
 
   useEffect(() => {
-    setBookings(getAllBookings().reverse());
+    Promise.all([fetchAllBookings(), fetchAllProducts()]).then(([b, p]) => {
+      setBookings(b);
+      setProducts(p);
+    });
   }, []);
 
-  const refresh = () => setBookings(getAllBookings().reverse());
+  const refresh = async () => {
+    const [b, p] = await Promise.all([fetchAllBookings(), fetchAllProducts()]);
+    setBookings(b);
+    setProducts(p);
+  };
+
+  const getProductById = (id: string) => products.find(p => p.id === id);
 
   const filtered = filter
     ? bookings.filter(b => b.status === filter)
@@ -36,14 +46,14 @@ export default function AdminBookingsPage() {
     damaged: 'badge-error',
   };
 
-  const handleStatusChange = (bookingId: string, status: BookingStatus) => {
-    updateBookingStatus(bookingId, status);
-    refresh();
+  const handleStatusChange = async (bookingId: string, status: BookingStatus) => {
+    await apiUpdateBookingStatus(bookingId, status);
+    await refresh();
   };
 
-  const handleItemStatusChange = (bookingId: string, itemId: string, status: BookingItemStatus) => {
-    updateBookingItemStatus(bookingId, itemId, status);
-    refresh();
+  const handleItemStatusChange = async (bookingId: string, itemId: string, status: BookingItemStatus) => {
+    await apiUpdateBookingItemStatus(bookingId, itemId, status);
+    await refresh();
   };
 
   return (

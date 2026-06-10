@@ -2,15 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getCart, getCartProducts, removeFromCart, getCartCount } from '@/lib/data/store';
+import { getCartProducts, removeFromCart, getCartCount } from '@/lib/api';
 import { Product } from '@/lib/types';
 
 export default function CartPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [cartCount, setCartCount] = useState(0);
 
-  const refresh = () => {
-    setProducts(getCartProducts());
+  const refresh = async () => {
+    setProducts(await getCartProducts());
     setCartCount(getCartCount());
   };
 

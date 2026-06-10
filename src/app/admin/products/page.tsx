@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { getAllProducts, createProduct, updateProduct, deleteProduct } from '@/lib/data/store';
+import { fetchAllProducts, createProduct as apiCreateProduct, updateProduct as apiUpdateProduct, deleteProduct as apiDeleteProduct } from '@/lib/api';
 import { Product, CATEGORIES, Category, InventoryStatus } from '@/lib/types';
 import { exportProductsToExcel } from '@/lib/exportExcel';
 
@@ -21,10 +21,10 @@ export default function AdminProductsPage() {
   });
 
   useEffect(() => {
-    setProducts(getAllProducts());
+    fetchAllProducts().then(setProducts);
   }, []);
 
-  const refresh = () => setProducts(getAllProducts());
+  const refresh = async () => setProducts(await fetchAllProducts());
 
   const filtered = products.filter(p => {
     if (filter && p.category !== filter) return false;
@@ -96,7 +96,7 @@ export default function AdminProductsPage() {
     });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!form.name || !form.price) {
       alert('Please fill in product name and price.');
       return;
@@ -123,24 +123,24 @@ export default function AdminProductsPage() {
     };
 
     if (editing) {
-      updateProduct(editing.id, productData);
+      await apiUpdateProduct(editing.id, productData);
     } else {
-      createProduct(productData);
+      await apiCreateProduct(productData);
     }
     setShowModal(false);
-    refresh();
+    await refresh();
   };
 
-  const handleDelete = (id: string) => {
+  const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
-      deleteProduct(id);
-      refresh();
+      await apiDeleteProduct(id);
+      await refresh();
     }
   };
 
-  const toggleVisibility = (p: Product) => {
-    updateProduct(p.id, { isVisible: !p.isVisible });
-    refresh();
+  const toggleVisibility = async (p: Product) => {
+    await apiUpdateProduct(p.id, { isVisible: !p.isVisible });
+    await refresh();
   };
 
   const STATUS_BADGE: Record<string, string> = {

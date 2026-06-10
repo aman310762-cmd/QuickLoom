@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getAllProducts, restockProduct, updateProductStatus } from '@/lib/data/store';
+import { fetchAllProducts, updateProduct as apiUpdateProduct } from '@/lib/api';
 import { Product, InventoryStatus, CATEGORIES } from '@/lib/types';
 import { exportInventoryToExcel } from '@/lib/exportExcel';
 
@@ -11,10 +11,10 @@ export default function AdminInventoryPage() {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    setProducts(getAllProducts());
+    fetchAllProducts().then(setProducts);
   }, []);
 
-  const refresh = () => setProducts(getAllProducts());
+  const refresh = async () => setProducts(await fetchAllProducts());
 
   const filtered = products.filter(p => {
     if (statusFilter && p.status !== statusFilter) return false;
@@ -52,14 +52,14 @@ export default function AdminInventoryPage() {
     return acc;
   }, {});
 
-  const handleRestock = (id: string) => {
-    restockProduct(id);
-    refresh();
+  const handleRestock = async (id: string) => {
+    await apiUpdateProduct(id, { status: 'available' });
+    await refresh();
   };
 
-  const handleStatusChange = (id: string, status: InventoryStatus) => {
-    updateProductStatus(id, status);
-    refresh();
+  const handleStatusChange = async (id: string, status: InventoryStatus) => {
+    await apiUpdateProduct(id, { status });
+    await refresh();
   };
 
   return (

@@ -3,7 +3,7 @@
 import { useParams } from 'next/navigation';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
-import { getProductById, addToCart, isInCart, removeFromCart, getSimilarProducts, getCartCount } from '@/lib/data/store';
+import { fetchProductById, fetchProductsByCategory, addToCart, isInCart, removeFromCart, getCartCount } from '@/lib/api';
 import { Product } from '@/lib/types';
 
 function ImageZoom({ src, alt }: { src: string; alt: string }) {
@@ -75,14 +75,18 @@ export default function ProductDetailPage() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   useEffect(() => {
-    const p = getProductById(id);
-    if (p) {
-      setProduct(p);
-      setInCart(isInCart(p.id));
-      setSimilar(getSimilarProducts(p));
-      setSelectedImageIndex(0);
-    }
-    setCartCount(getCartCount());
+    const load = async () => {
+      const p = await fetchProductById(id);
+      if (p) {
+        setProduct(p);
+        setInCart(isInCart(p.id));
+        const catProducts = await fetchProductsByCategory(p.category);
+        setSimilar(catProducts.filter(sp => sp.id !== p.id).slice(0, 4));
+        setSelectedImageIndex(0);
+      }
+      setCartCount(getCartCount());
+    };
+    load();
   }, [id]);
 
   const handleCart = () => {

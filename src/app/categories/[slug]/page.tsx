@@ -3,13 +3,14 @@
 import { useParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { filterProducts, getCartCount } from '@/lib/data/store';
+import { fetchProductsByCategory, getCartCount } from '@/lib/api';
 import { CATEGORIES, Category, Product } from '@/lib/types';
 import { ProductCard } from '@/components/ProductCard';
 
 export default function CategoryPage() {
   const params = useParams();
   const slug = params?.slug as Category;
+  const [allCategoryProducts, setAllCategoryProducts] = useState<Product[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [sortBy, setSortBy] = useState<'newest' | 'price-asc' | 'price-desc'>('newest');
   const [colorFilter, setColorFilter] = useState('');
@@ -19,14 +20,19 @@ export default function CategoryPage() {
   const category = CATEGORIES.find(c => c.slug === slug);
 
   useEffect(() => {
-    const filtered = filterProducts({
-      category: slug,
-      color: colorFilter || undefined,
-      priceMax,
-      sortBy,
+    fetchProductsByCategory(slug).then(data => {
+      setAllCategoryProducts(data);
     });
+  }, [slug]);
+
+  useEffect(() => {
+    let filtered = [...allCategoryProducts];
+    if (colorFilter) filtered = filtered.filter(p => p.color === colorFilter);
+    if (priceMax) filtered = filtered.filter(p => p.price <= priceMax);
+    if (sortBy === 'price-asc') filtered.sort((a, b) => a.price - b.price);
+    else if (sortBy === 'price-desc') filtered.sort((a, b) => b.price - a.price);
     setProducts(filtered);
-  }, [slug, sortBy, colorFilter, priceMax]);
+  }, [allCategoryProducts, sortBy, colorFilter, priceMax]);
 
   useEffect(() => {
     const updateCount = () => setCartCount(getCartCount());
@@ -40,7 +46,7 @@ export default function CategoryPage() {
   }, []);
 
   const uniqueColors = [...new Set(
-    filterProducts({ category: slug }).map(p => p.color)
+    allCategoryProducts.map(p => p.color)
   )];
 
   const clearFilters = () => {

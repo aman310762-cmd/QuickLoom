@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { createBooking, getCartCount, getCartProducts } from '@/lib/data/store';
+import { createBooking, getCartCount, getCartProducts, getCartProductIds, clearCart } from '@/lib/api';
 import { CITIES } from '@/lib/types';
 import { Product } from '@/lib/types';
 
@@ -23,10 +23,10 @@ export default function BookTrialPage() {
 
   useEffect(() => {
     setCartCount(getCartCount());
-    setCartProducts(getCartProducts().slice(0, 3));
+    getCartProducts().then(prods => setCartProducts(prods.slice(0, 3)));
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     if (!form.customerName || !form.customerPhone || !form.city || !form.address || !form.preferredSlot) {
@@ -38,12 +38,17 @@ export default function BookTrialPage() {
       return;
     }
     setLoading(true);
-    setTimeout(() => {
-      createBooking(form);
+    const productIds = getCartProductIds();
+    const result = await createBooking({ ...form, productIds });
+    if (result) {
+      clearCart();
       window.dispatchEvent(new Event('cartUpdated'));
       router.push('/');
       alert('🎉 Trial booked successfully! Our team will call you to confirm your slot.');
-    }, 800);
+    } else {
+      setError('Something went wrong. Please try again.');
+      setLoading(false);
+    }
   };
 
   const timeSlots = [

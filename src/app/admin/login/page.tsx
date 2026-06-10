@@ -2,7 +2,14 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { adminLogin } from '@/lib/data/store';
+
+function adminLogin(u: string, p: string) {
+  if (u === 'Aman2030' && p === '6375625863') {
+    localStorage.setItem('ql_admin', 'true');
+    return true;
+  }
+  return false;
+}
 
 export default function AdminLoginPage() {
   const router = useRouter();
