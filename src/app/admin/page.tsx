@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { getAdminStats, getAllBookings, getAllProducts } from '@/lib/data/store';
+import { getAdminStats, getAllBookings, getAllProducts, getProductById } from '@/lib/data/store';
 import { Booking, Product } from '@/lib/types';
+import { exportProductsToExcel, exportBookingsToExcel, exportInventoryToExcel, exportFullReportToExcel } from '@/lib/exportExcel';
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<ReturnType<typeof getAdminStats> | null>(null);
@@ -66,7 +67,7 @@ export default function AdminDashboard() {
           <h1>Dashboard</h1>
           <p style={{ color: 'var(--color-on-surface-variant)', fontSize: '14px' }}>{currentTime}</p>
         </div>
-        <div style={{ display: 'flex', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
           <Link href="/admin/products" className="btn btn-primary btn-sm">
             <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>add</span>
             Add Product
@@ -75,6 +76,14 @@ export default function AdminDashboard() {
             <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>receipt_long</span>
             View Bookings
           </Link>
+          <button
+            className="btn btn-sm"
+            onClick={() => exportFullReportToExcel(products, getAllBookings(), getProductById)}
+            style={{ background: '#10B981', color: 'white', border: 'none' }}
+          >
+            <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>download</span>
+            Export Full Report
+          </button>
         </div>
       </div>
 
@@ -128,6 +137,24 @@ export default function AdminDashboard() {
           </div>
           <div className="action-label">View Live Site</div>
         </Link>
+        <button className="admin-quick-action" onClick={() => exportProductsToExcel(products)}>
+          <div className="action-icon" style={{ background: 'rgba(99,102,241,0.08)' }}>
+            <span className="material-symbols-outlined" style={{ color: '#6366F1' }}>table_chart</span>
+          </div>
+          <div className="action-label">Export Products</div>
+        </button>
+        <button className="admin-quick-action" onClick={() => exportBookingsToExcel(getAllBookings(), getProductById)}>
+          <div className="action-icon" style={{ background: 'rgba(236,72,153,0.08)' }}>
+            <span className="material-symbols-outlined" style={{ color: '#EC4899' }}>receipt</span>
+          </div>
+          <div className="action-label">Export Bookings</div>
+        </button>
+        <button className="admin-quick-action" onClick={() => exportInventoryToExcel(products)}>
+          <div className="action-icon" style={{ background: 'rgba(14,165,233,0.08)' }}>
+            <span className="material-symbols-outlined" style={{ color: '#0EA5E9' }}>inventory</span>
+          </div>
+          <div className="action-label">Export Inventory</div>
+        </button>
       </div>
 
       {/* Stats Grid */}

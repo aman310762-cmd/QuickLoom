@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { getAllProducts, restockProduct, updateProductStatus } from '@/lib/data/store';
 import { Product, InventoryStatus, CATEGORIES } from '@/lib/types';
+import { exportInventoryToExcel } from '@/lib/exportExcel';
 
 export default function AdminInventoryPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -68,6 +69,14 @@ export default function AdminInventoryPage() {
           <h1>Inventory</h1>
           <p style={{ color: 'var(--color-text-secondary)' }}>Track product status and availability</p>
         </div>
+        <button
+          className="btn btn-sm"
+          onClick={() => exportInventoryToExcel(products)}
+          style={{ background: '#10B981', color: 'white', border: 'none' }}
+        >
+          <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>download</span>
+          Export Excel
+        </button>
       </div>
 
       {/* Status overview */}

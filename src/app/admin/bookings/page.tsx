@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { getAllBookings, updateBookingStatus, updateBookingItemStatus, getProductById } from '@/lib/data/store';
 import { Booking, BookingStatus, BookingItemStatus } from '@/lib/types';
+import { exportBookingsToExcel } from '@/lib/exportExcel';
 
 export default function AdminBookingsPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -52,6 +53,15 @@ export default function AdminBookingsPage() {
           <h1>Bookings</h1>
           <p style={{ color: 'var(--color-text-secondary)' }}>{bookings.length} total bookings</p>
         </div>
+        <button
+          className="btn btn-sm"
+          onClick={() => exportBookingsToExcel(bookings, getProductById)}
+          style={{ background: '#10B981', color: 'white', border: 'none' }}
+          disabled={bookings.length === 0}
+        >
+          <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>download</span>
+          Export Excel
+        </button>
       </div>
 
       <div className="filter-bar">

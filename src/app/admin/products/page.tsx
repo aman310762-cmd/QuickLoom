@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { getAllProducts, createProduct, updateProduct, deleteProduct } from '@/lib/data/store';
 import { Product, CATEGORIES, Category, InventoryStatus } from '@/lib/types';
+import { exportProductsToExcel } from '@/lib/exportExcel';
 
 export default function AdminProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -159,10 +160,20 @@ export default function AdminProductsPage() {
           <h1>Products</h1>
           <p style={{ color: 'var(--color-on-surface-variant)', fontSize: '14px' }}>{products.length} total products</p>
         </div>
-        <button className="btn btn-primary" onClick={openCreate}>
-          <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>add</span>
-          Add Product
-        </button>
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <button className="btn btn-primary" onClick={openCreate}>
+            <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>add</span>
+            Add Product
+          </button>
+          <button
+            className="btn btn-sm"
+            onClick={() => exportProductsToExcel(products)}
+            style={{ background: '#10B981', color: 'white', border: 'none' }}
+          >
+            <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>download</span>
+            Export Excel
+          </button>
+        </div>
       </div>
 
       {/* Filter & Search */}
