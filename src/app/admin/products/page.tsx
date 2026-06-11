@@ -158,7 +158,7 @@ export default function AdminProductsPage() {
       <div className="admin-header">
         <div>
           <h1>Products</h1>
-          <p style={{ color: 'var(--color-on-surface-variant)', fontSize: '14px' }}>{products.length} total products</p>
+          <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>{products.length} total products</p>
         </div>
         <div style={{ display: 'flex', gap: '0.5rem' }}>
           <button className="btn btn-primary" onClick={openCreate}>
@@ -196,7 +196,7 @@ export default function AdminProductsPage() {
           />
         </div>
         <div style={{ flex: 1 }} />
-        <div style={{ color: 'var(--color-outline)', fontSize: '14px' }}>
+        <div style={{ color: 'var(--text-faint)', fontSize: '14px' }}>
           Showing {filtered.length} products
         </div>
       </div>
@@ -222,13 +222,13 @@ export default function AdminProductsPage() {
                 <td>
                   <div style={{
                     width: '48px', height: '48px', borderRadius: 'var(--radius-md)',
-                    overflow: 'hidden', background: 'var(--color-surface-container)',
+                    overflow: 'hidden', background: 'var(--bg-alt)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
                     {p.images && p.images.length > 0 && p.images[0] && !p.images[0].includes('/images/products/bedsheet') ? (
                       <img src={p.images[0]} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     ) : (
-                      <span className="material-symbols-outlined" style={{ fontSize: '20px', color: 'var(--color-outline)' }}>image</span>
+                      <span className="material-symbols-outlined" style={{ fontSize: '20px', color: 'var(--text-faint)' }}>image</span>
                     )}
                   </div>
                 </td>
@@ -236,7 +236,7 @@ export default function AdminProductsPage() {
                   <div style={{ fontWeight: 600, maxWidth: '220px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {p.name}
                   </div>
-                  <div style={{ fontSize: '12px', color: 'var(--color-outline)' }}>
+                  <div style={{ fontSize: '12px', color: 'var(--text-faint)' }}>
                     {p.size} · {p.color}
                   </div>
                 </td>
@@ -244,14 +244,14 @@ export default function AdminProductsPage() {
                   <span className="badge badge-neutral">{CATEGORIES.find(c => c.slug === p.category)?.name}</span>
                 </td>
                 <td>
-                  <div style={{ fontWeight: 700, color: 'var(--color-primary)' }}>₹{p.price.toLocaleString()}</div>
+                  <div style={{ fontWeight: 700, color: 'var(--accent)' }}>₹{p.price.toLocaleString()}</div>
                   {p.originalPrice > p.price && (
-                    <div style={{ fontSize: '12px', color: 'var(--color-outline)', textDecoration: 'line-through' }}>
+                    <div style={{ fontSize: '12px', color: 'var(--text-faint)', textDecoration: 'line-through' }}>
                       ₹{p.originalPrice.toLocaleString()}
                     </div>
                   )}
                 </td>
-                <td style={{ fontFamily: 'monospace', fontSize: '12px', color: 'var(--color-on-surface-variant)' }}>{p.sku}</td>
+                <td style={{ fontFamily: 'monospace', fontSize: '12px', color: 'var(--text-muted)' }}>{p.sku}</td>
                 <td>
                   <span className={`badge ${STATUS_BADGE[p.status] || 'badge-neutral'}`}>
                     {p.status.replace(/_/g, ' ')}
@@ -264,8 +264,8 @@ export default function AdminProductsPage() {
                       padding: '4px 10px', borderRadius: 'var(--radius-full)', fontSize: '12px',
                       fontWeight: 500, border: '1px solid',
                       background: p.isVisible ? 'rgba(16,185,129,0.1)' : 'transparent',
-                      borderColor: p.isVisible ? '#10B981' : 'var(--color-outline-variant)',
-                      color: p.isVisible ? '#10B981' : 'var(--color-outline)',
+                      borderColor: p.isVisible ? '#10B981' : 'var(--border)',
+                      color: p.isVisible ? '#10B981' : 'var(--text-faint)',
                       cursor: 'pointer',
                     }}
                   >
@@ -317,7 +317,7 @@ export default function AdminProductsPage() {
                   style={{ display: 'none' }}
                 />
                 <div className="upload-icon">
-                  <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: 'var(--color-outline)' }}>
+                  <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: 'var(--text-faint)' }}>
                     {uploadingImages ? 'hourglass_empty' : 'cloud_upload'}
                   </span>
                 </div>

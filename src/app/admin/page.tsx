@@ -75,7 +75,7 @@ export default function AdminDashboard() {
       <div className="admin-header">
         <div>
           <h1>Dashboard</h1>
-          <p style={{ color: 'var(--color-on-surface-variant)', fontSize: '14px' }}>{currentTime}</p>
+          <p style={{ color: 'var(--text-muted)', fontSize: '14px' }}>{currentTime}</p>
         </div>
         <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
           <Link href="/admin/products" className="btn btn-primary btn-sm">
@@ -107,23 +107,24 @@ export default function AdminDashboard() {
       </div>
 
       {/* Revenue Card */}
-      <div className="admin-revenue-card">
-        <h3>Total Revenue</h3>
-        <div className="revenue-amount">₹{totalRevenue.toLocaleString('en-IN')}</div>
-        <div className="revenue-breakdown">
-          <div className="revenue-item">
+      <div style={{ background: 'var(--accent)', borderRadius: 'var(--radius-xl)', padding: 28, color: 'white', marginBottom: 24, position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', inset: 0, background: 'repeating-linear-gradient(45deg, oklch(1 0 0 / 0.05) 0 14px, transparent 14px 28px)', pointerEvents: 'none' }} />
+        <h3 style={{ fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: 1.5, textTransform: 'uppercase', opacity: 0.8, position: 'relative' }}>Total Revenue</h3>
+        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 40, position: 'relative', marginTop: 4 }}>₹{totalRevenue.toLocaleString('en-IN')}</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginTop: 20, position: 'relative' }}>
+          <div style={{ padding: '10px 14px', background: 'oklch(1 0 0 / 0.12)', borderRadius: 'var(--radius-md)' }}>
             <span>Items Sold</span>
             <span>{soldProducts.length}</span>
           </div>
-          <div className="revenue-item">
+          <div style={{ padding: '10px 14px', background: 'oklch(1 0 0 / 0.12)', borderRadius: 'var(--radius-md)' }}>
             <span>Avg Order Value</span>
             <span>₹{avgOrderValue.toLocaleString('en-IN')}</span>
           </div>
-          <div className="revenue-item">
+          <div style={{ padding: '10px 14px', background: 'oklch(1 0 0 / 0.12)', borderRadius: 'var(--radius-md)' }}>
             <span>Active Trials</span>
             <span>{stats.outForTrial}</span>
           </div>
-          <div className="revenue-item">
+          <div style={{ padding: '10px 14px', background: 'oklch(1 0 0 / 0.12)', borderRadius: 'var(--radius-md)' }}>
             <span>Conversion Rate</span>
             <span>{stats.totalBookings > 0 ? Math.round((soldProducts.length / (stats.totalBookings || 1)) * 100) : 0}%</span>
           </div>
@@ -181,18 +182,18 @@ export default function AdminDashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="admin-stats-grid">
+      <div className="admin-stat-grid">
         {statCards.map((stat, i) => (
           <div key={i} className="admin-stat-card">
             <div style={{
-              width: '40px', height: '40px', borderRadius: 'var(--radius-lg)',
+              width: 40, height: 40, borderRadius: 'var(--radius-md)',
               background: stat.bg, display: 'flex', alignItems: 'center', justifyContent: 'center',
-              marginBottom: '0.5rem',
+              marginBottom: 8,
             }}>
-              <span className="material-symbols-outlined" style={{ color: stat.color, fontSize: '22px' }}>{stat.icon}</span>
+              <span className="material-symbols-outlined" style={{ color: stat.color, fontSize: 22 }}>{stat.icon}</span>
             </div>
-            <div className="stat-label">{stat.label}</div>
-            <div className="stat-value" style={{ color: stat.color }}>{stat.value}</div>
+            <div className="admin-stat-label">{stat.label}</div>
+            <div className="admin-stat-number" style={{ color: stat.color }}>{stat.value}</div>
           </div>
         ))}
       </div>
@@ -212,7 +213,7 @@ export default function AdminDashboard() {
               <span className="material-symbols-outlined" style={{ color: '#F59E0B', fontSize: '24px' }}>photo_camera</span>
               <div>
                 <div style={{ fontWeight: 600, fontSize: '14px', marginBottom: '0.125rem' }}>{lowImageProducts} products without photos</div>
-                <div style={{ fontSize: '12px', color: 'var(--color-on-surface-variant)' }}>Add images to improve trial conversion.</div>
+                <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Add images to improve trial conversion.</div>
               </div>
               <Link href="/admin/products" style={{ marginLeft: 'auto', color: '#F59E0B', fontSize: '13px', fontWeight: 500 }}>Fix →</Link>
             </div>
@@ -226,7 +227,7 @@ export default function AdminDashboard() {
               <span className="material-symbols-outlined" style={{ color: '#BA1A1A', fontSize: '24px' }}>warning</span>
               <div>
                 <div style={{ fontWeight: 600, fontSize: '14px', marginBottom: '0.125rem' }}>{stats.returnedPending} items pending inspection</div>
-                <div style={{ fontSize: '12px', color: 'var(--color-on-surface-variant)' }}>Review returned items and restock.</div>
+                <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Review returned items and restock.</div>
               </div>
               <Link href="/admin/inventory" style={{ marginLeft: 'auto', color: '#BA1A1A', fontSize: '13px', fontWeight: 500 }}>Review →</Link>
             </div>
@@ -238,47 +239,47 @@ export default function AdminDashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 'var(--space-xl)', marginTop: 'var(--space-xl)' }}>
         {/* Recent Bookings */}
         <div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <h2 style={{ fontSize: '1.25rem' }}>Recent Bookings</h2>
-            <Link href="/admin/bookings" className="btn btn-ghost btn-sm" style={{ fontSize: '13px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 20 }}>Recent Bookings</h2>
+            <Link href="/admin/bookings" className="btn btn-sm">
               View All <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>chevron_right</span>
             </Link>
           </div>
 
           {recentBookings.length === 0 ? (
-            <div className="admin-table-wrapper" style={{ padding: '3rem', textAlign: 'center', color: 'var(--color-outline)' }}>
-              <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', marginBottom: '0.5rem', display: 'block' }}>event_busy</span>
-              No bookings yet. They will appear here when customers book trials.
+            <div className="ql-card" style={{ padding: 48, textAlign: 'center', color: 'var(--text-faint)', border: '1px solid var(--border)' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: 40, marginBottom: 8, display: 'block' }}>event_busy</span>
+              No bookings yet
             </div>
           ) : (
-            <div className="admin-table-wrapper">
-              <table className="admin-table">
+            <div className="ql-card" style={{ overflow: 'hidden', border: '1px solid var(--border)' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 14 }}>
                 <thead>
-                  <tr>
-                    <th>Booking ID</th>
-                    <th>Customer</th>
-                    <th>City</th>
-                    <th>Items</th>
-                    <th>Status</th>
-                    <th>Date</th>
+                  <tr style={{ borderBottom: '1px solid var(--border)', background: 'var(--bg-alt)' }}>
+                    <th style={{ padding: '12px 16px', textAlign: 'left', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: 1, textTransform: 'uppercase', color: 'var(--text-faint)' }}>Booking ID</th>
+                    <th style={{ padding: '12px 16px', textAlign: 'left', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: 1, textTransform: 'uppercase', color: 'var(--text-faint)' }}>Customer</th>
+                    <th style={{ padding: '12px 16px', textAlign: 'left', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: 1, textTransform: 'uppercase', color: 'var(--text-faint)' }}>City</th>
+                    <th style={{ padding: '12px 16px', textAlign: 'left', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: 1, textTransform: 'uppercase', color: 'var(--text-faint)' }}>Items</th>
+                    <th style={{ padding: '12px 16px', textAlign: 'left', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: 1, textTransform: 'uppercase', color: 'var(--text-faint)' }}>Status</th>
+                    <th style={{ padding: '12px 16px', textAlign: 'left', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: 1, textTransform: 'uppercase', color: 'var(--text-faint)' }}>Date</th>
                   </tr>
                 </thead>
                 <tbody>
                   {recentBookings.map(b => (
-                    <tr key={b.id}>
-                      <td style={{ fontFamily: 'monospace', fontWeight: 600, fontSize: '13px' }}>{b.id}</td>
-                      <td>
+                    <tr key={b.id} style={{ borderBottom: '1px solid var(--border)' }}>
+                      <td style={{ padding: '12px 16px', fontFamily: 'var(--font-mono)', fontWeight: 600, fontSize: 13 }}>{b.id}</td>
+                      <td style={{ padding: '12px 16px' }}>
                         <div style={{ fontWeight: 500 }}>{b.customerName}</div>
-                        <div style={{ fontSize: '12px', color: 'var(--color-outline)' }}>{b.customerPhone}</div>
+                        <div style={{ fontSize: '12px', color: 'var(--text-faint)' }}>{b.customerPhone}</div>
                       </td>
-                      <td><span className="badge badge-info">{b.city}</span></td>
-                      <td style={{ fontWeight: 600 }}>{b.items.length}</td>
-                      <td>
+                      <td style={{ padding: '12px 16px' }}><span className="badge badge-info">{b.city}</span></td>
+                      <td style={{ padding: '12px 16px', fontWeight: 600 }}>{b.items.length}</td>
+                      <td style={{ padding: '12px 16px' }}>
                         <span className={`badge ${STATUS_BADGE[b.status] || 'badge-neutral'}`}>
                           {b.status.replace(/_/g, ' ')}
                         </span>
                       </td>
-                      <td style={{ fontSize: '13px', color: 'var(--color-outline)' }}>
+                      <td style={{ padding: '12px 16px', fontSize: 13, color: 'var(--text-faint)' }}>
                         {new Date(b.createdAt).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })}
                       </td>
                     </tr>
@@ -291,25 +292,25 @@ export default function AdminDashboard() {
 
         {/* Activity Feed */}
         <div>
-          <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Recent Activity</h2>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 20, marginBottom: 16 }}>Recent Activity</h2>
           <div style={{
-            background: 'var(--color-surface-container-lowest)',
-            border: '1px solid var(--color-outline-variant)',
+            background: 'var(--card)',
+            border: '1px solid var(--border)',
             borderRadius: 'var(--radius-xl)',
             padding: 'var(--space-lg)',
           }}>
             {activities.length === 0 ? (
-              <div style={{ textAlign: 'center', color: 'var(--color-outline)', padding: 'var(--space-xl)' }}>
+              <div style={{ textAlign: 'center', color: 'var(--text-faint)', padding: 'var(--space-xl)' }}>
                 <span className="material-symbols-outlined" style={{ fontSize: '2rem', display: 'block', marginBottom: '0.5rem' }}>history</span>
                 No recent activity
               </div>
             ) : (
-              <ul className="admin-activity-list">
+              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12 }}>
                 {activities.map((act, i) => (
-                  <li key={i} className="admin-activity-item">
-                    <div className="admin-activity-dot" style={{ background: act.color }} />
-                    <span className="admin-activity-text">{act.text}</span>
-                    <span className="admin-activity-time">{act.time}</span>
+                  <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 13 }}>
+                    <span style={{ width: 8, height: 8, borderRadius: '50%', background: act.color, flexShrink: 0, marginTop: 5 }} />
+                    <span style={{ flex: 1, color: 'var(--text-muted)', lineHeight: 1.5 }}>{act.text}</span>
+                    <span style={{ fontSize: 11, color: 'var(--text-faint)', whiteSpace: 'nowrap' }}>{act.time}</span>
                   </li>
                 ))}
               </ul>
@@ -318,8 +319,8 @@ export default function AdminDashboard() {
 
           {/* Quick Stats Mini */}
           <div style={{
-            background: 'var(--color-surface-container-lowest)',
-            border: '1px solid var(--color-outline-variant)',
+            background: 'var(--card)',
+            border: '1px solid var(--border)',
             borderRadius: 'var(--radius-xl)',
             padding: 'var(--space-lg)',
             marginTop: 'var(--space-md)',
@@ -327,30 +328,30 @@ export default function AdminDashboard() {
             <h3 style={{ fontSize: '14px', fontWeight: 600, marginBottom: 'var(--space-md)' }}>Catalog Health</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '13px', color: 'var(--color-on-surface-variant)' }}>Products with photos</span>
+                <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Products with photos</span>
                 <span style={{ fontSize: '13px', fontWeight: 600 }}>
                   {products.filter(p => p.images && p.images.length > 0).length}/{products.length}
                 </span>
               </div>
               <div style={{
-                height: '6px', background: 'var(--color-surface-container)',
+                height: '6px', background: 'var(--bg-alt)',
                 borderRadius: 'var(--radius-full)', overflow: 'hidden',
               }}>
                 <div style={{
                   height: '100%', borderRadius: 'var(--radius-full)',
-                  background: 'var(--color-primary)',
+                  background: 'var(--accent)',
                   width: `${products.length > 0 ? (products.filter(p => p.images && p.images.length > 0).length / products.length) * 100 : 0}%`,
                   transition: 'width 0.3s ease',
                 }} />
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '13px', color: 'var(--color-on-surface-variant)' }}>Visible on site</span>
+                <span style={{ fontSize: '13px', color: 'var(--text-muted)' }}>Visible on site</span>
                 <span style={{ fontSize: '13px', fontWeight: 600 }}>
                   {products.filter(p => p.isVisible).length}/{products.length}
                 </span>
               </div>
               <div style={{
-                height: '6px', background: 'var(--color-surface-container)',
+                height: '6px', background: 'var(--bg-alt)',
                 borderRadius: 'var(--radius-full)', overflow: 'hidden',
               }}>
                 <div style={{

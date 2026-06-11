@@ -111,10 +111,10 @@ export default function ProductDetailPage() {
 
   if (!product) {
     return (
-      <div className="container" style={{ padding: '4rem 0', textAlign: 'center' }}>
-        <span className="material-symbols-outlined" style={{ fontSize: '4rem', color: 'var(--color-outline)' }}>inventory_2</span>
-        <h2 style={{ marginTop: '1rem' }}>Product not found</h2>
-        <Link href="/" className="btn btn-primary" style={{ marginTop: '1rem' }}>Go Home</Link>
+      <div className="container" style={{ padding: '80px 0', textAlign: 'center' }}>
+        <span className="material-symbols-outlined" style={{ fontSize: 64, color: 'var(--text-faint)' }}>inventory_2</span>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, marginTop: 16 }}>Product not found</h2>
+        <Link href="/" className="btn btn-primary" style={{ marginTop: 16 }}>Go Home</Link>
       </div>
     );
   }
@@ -132,7 +132,7 @@ export default function ProductDetailPage() {
           <span style={{ margin: '0 0.5rem', opacity: 0.5 }}>&gt;</span>
           <Link href={`/categories/${product.category}`}>{product.subcategory}</Link>
           <span style={{ margin: '0 0.5rem', opacity: 0.5 }}>&gt;</span>
-          <span style={{ color: 'var(--color-on-surface)' }}>{product.name}</span>
+          <span style={{ color: 'var(--text)' }}>{product.name}</span>
         </div>
 
         {/* Product Grid */}
@@ -146,16 +146,16 @@ export default function ProductDetailPage() {
               ) : (
                 <div style={{
                   width: '100%', aspectRatio: '1', position: 'relative',
-                  background: `linear-gradient(135deg, var(--color-surface-container-high), var(--color-surface-container))`,
+                  background: 'var(--bg-alt)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   borderRadius: 'var(--radius-xl)',
                 }}>
-                  <span className="material-symbols-outlined" style={{ fontSize: '5rem', color: 'var(--color-outline)' }}>image</span>
+                  <span className="material-symbols-outlined" style={{ fontSize: 80, color: 'var(--text-faint)' }}>image</span>
                 </div>
               )}
               {/* Material Badge */}
-              <div style={{ position: 'absolute', top: '1rem', right: '1rem', zIndex: 20 }}>
-                <span className="material-badge" style={{ background: 'var(--color-primary-container)', color: 'var(--color-on-primary-container)', fontSize: '12px' }}>
+              <div style={{ position: 'absolute', top: 16, right: 16, zIndex: 20 }}>
+                <span className="material-badge">
                   {materialLabel}
                 </span>
               </div>
@@ -181,11 +181,11 @@ export default function ProductDetailPage() {
                     key={i}
                     onClick={() => setSelectedImageIndex(i)}
                     style={{
-                      width: '72px', height: '72px', borderRadius: 'var(--radius-md)',
+                      width: 72, height: 72, borderRadius: 'var(--radius-md)',
                       overflow: 'hidden', cursor: 'pointer',
                       border: selectedImageIndex === i
-                        ? '2px solid var(--color-primary)'
-                        : '2px solid var(--color-outline-variant)',
+                        ? '2px solid var(--accent)'
+                        : '2px solid var(--border)',
                       padding: 0, background: 'none', opacity: selectedImageIndex === i ? 1 : 0.7,
                       transition: 'all 0.2s ease',
                     }}
@@ -198,8 +198,8 @@ export default function ProductDetailPage() {
 
             {/* Image count indicator */}
             {hasImages && product.images.length > 1 && (
-              <div style={{ textAlign: 'center', fontSize: '13px', color: 'var(--color-outline)', marginTop: '0.5rem' }}>
-                <span className="material-symbols-outlined" style={{ fontSize: '16px', verticalAlign: 'text-bottom' }}>photo_library</span>
+              <div style={{ textAlign: 'center', fontSize: 13, color: 'var(--text-faint)', marginTop: 8 }}>
+                <span className="material-symbols-outlined" style={{ fontSize: 16, verticalAlign: 'text-bottom' }}>photo_library</span>
                 {' '}{selectedImageIndex + 1} of {product.images.length} photos · Click to view different angles
               </div>
             )}
@@ -213,7 +213,7 @@ export default function ProductDetailPage() {
               ₹{product.price.toLocaleString('en-IN')}
               {product.originalPrice > product.price && (
                 <>
-                  <span style={{ fontSize: '16px', color: 'var(--color-outline)', textDecoration: 'line-through', marginLeft: '0.75rem', fontWeight: 400 }}>
+                  <span style={{ fontSize: 16, color: 'var(--text-faint)', textDecoration: 'line-through', marginLeft: 12, fontWeight: 400 }}>
                     ₹{product.originalPrice.toLocaleString('en-IN')}
                   </span>
                   <span style={{ fontSize: '14px', color: '#10B981', fontWeight: 600, marginLeft: '0.5rem' }}>
@@ -250,7 +250,7 @@ export default function ProductDetailPage() {
               </div>
             </div>
 
-            <p style={{ fontSize: '14px', color: 'var(--color-on-surface-variant)', lineHeight: 1.7, marginBottom: 'var(--space-lg)' }}>
+            <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.7, marginBottom: 24 }}>
               {product.description}
             </p>
 
@@ -264,7 +264,7 @@ export default function ProductDetailPage() {
               <span className="material-symbols-outlined">{inCart ? 'remove_shopping_cart' : 'add_shopping_cart'}</span>
               {inCart ? 'Remove from Trial Cart' : 'Add to Trial Cart'}
             </button>
-            <p style={{ textAlign: 'center', fontSize: '13px', color: 'var(--color-on-surface-variant)', marginTop: '0.75rem' }}>
+            <p style={{ textAlign: 'center', fontSize: 13, color: 'var(--text-muted)', marginTop: 12 }}>
               Trial Limit: {cartCount} of 10 items selected
             </p>
 
@@ -289,9 +289,9 @@ export default function ProductDetailPage() {
 
       {/* Similar Products */}
       {similar.length > 0 && (
-        <div className="section" style={{ background: 'var(--color-surface-container-low)' }}>
+        <div style={{ background: 'var(--bg-alt)', padding: '48px 0', borderTop: '1px solid var(--border)' }}>
           <div className="container">
-            <h2 style={{ fontSize: '24px', marginBottom: 'var(--space-lg)' }}>You might also want to try these</h2>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 24, marginBottom: 24 }}>You might also want to try these</h2>
             <div className="products-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
               {similar.map(p => {
                 const pHasImage = p.images && p.images.length > 0 && p.images[0];
@@ -303,10 +303,10 @@ export default function ProductDetailPage() {
                       ) : (
                         <div style={{
                           width: '100%', height: '100%',
-                          background: 'var(--color-surface-container)',
+                          background: 'var(--bg-alt)',
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                         }}>
-                          <span className="material-symbols-outlined" style={{ fontSize: '2.5rem', color: 'var(--color-outline)' }}>image</span>
+                          <span className="material-symbols-outlined" style={{ fontSize: 40, color: 'var(--text-faint)' }}>image</span>
                         </div>
                       )}
                     </div>
@@ -324,10 +324,10 @@ export default function ProductDetailPage() {
 
       {toast && (
         <div style={{
-          position: 'fixed', bottom: '5rem', left: '50%', transform: 'translateX(-50%)',
-          background: 'var(--color-inverse-surface)', color: 'var(--color-inverse-on-surface)',
-          padding: '0.75rem 1.5rem', borderRadius: 'var(--radius-lg)', fontSize: '14px',
-          fontWeight: 500, zIndex: 9999, boxShadow: 'var(--shadow-xl)', animation: 'fadeInUp 0.3s ease-out',
+          position: 'fixed', bottom: 80, left: '50%', transform: 'translateX(-50%)',
+          background: 'var(--text)', color: 'var(--bg)',
+          padding: '12px 24px', borderRadius: 'var(--radius-full)', fontSize: 14,
+          fontWeight: 600, zIndex: 9999, boxShadow: 'var(--shadow-xl)', animation: 'fadeInUp 0.3s ease-out',
         }}>
           {toast}
         </div>

@@ -8,13 +8,12 @@ import { useState, useEffect } from 'react';
 export function ProductCard({ product }: { product: Product }) {
   const [inCart, setInCart] = useState(false);
   const [toast, setToast] = useState('');
-  const hasImage = product.images && product.images.length > 0 && product.images[0] && !product.images[0].includes('/images/products/bedsheet');
 
   useEffect(() => {
     setInCart(isInCart(product.id));
   }, [product.id]);
 
-  const handleCart = (e: React.MouseEvent) => {
+  const handleToggleCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (inCart) {
@@ -31,72 +30,60 @@ export function ProductCard({ product }: { product: Product }) {
       }
     }
     window.dispatchEvent(new Event('cartUpdated'));
-    setTimeout(() => setToast(''), 2000);
+    setTimeout(() => setToast(''), 2500);
   };
 
-  const materialLabel = product.material.split(',')[0].trim();
+  const imgSrc = product.images?.[0] || '';
 
   return (
-    <div className="product-card">
-      <Link href={`/products/${product.id}`}>
+    <div className="product-card" style={{ position: 'relative' }}>
+      <Link href={`/products/${product.id}`} style={{ display: 'flex', flexDirection: 'column', flex: 1, textDecoration: 'none', color: 'inherit' }}>
         <div className="product-card-image">
-          {hasImage ? (
-            <img src={product.images[0]} alt={product.name} />
+          {imgSrc ? (
+            <img src={imgSrc} alt={product.name} />
           ) : (
-            <div style={{
-              width: '100%', height: '100%',
-              background: `linear-gradient(135deg, var(--color-surface-container-high), var(--color-surface-container))`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              flexDirection: 'column', gap: '0.5rem',
-            }}>
-              <span className="material-symbols-outlined" style={{ fontSize: '3rem', color: 'var(--color-outline)' }}>image</span>
-              <span style={{ fontSize: '12px', color: 'var(--color-outline)' }}>No image</span>
+            <div style={{ width: '100%', height: '100%', display: 'grid', placeItems: 'center' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: 48, color: 'var(--text-faint)' }}>image</span>
             </div>
           )}
-          <div className="product-card-material">
-            <span className="material-badge">{materialLabel}</span>
+          {product.material && (
+            <span className="product-card-badge">{product.material.split(',')[0].trim()}</span>
+          )}
+        </div>
+        <div className="product-card-body">
+          <div className="product-card-material">{product.category.replace('-', ' ')}</div>
+          <div className="product-card-name">{product.name}</div>
+          <div className="product-card-footer">
+            <div>
+              <span className="product-card-price">₹{product.price.toLocaleString('en-IN')}</span>
+              {product.originalPrice > product.price && (
+                <span className="product-card-original-price" style={{ marginLeft: 8 }}>
+                  ₹{product.originalPrice.toLocaleString('en-IN')}
+                </span>
+              )}
+            </div>
           </div>
-          {product.images && product.images.length > 1 && (
-            <div style={{
-              position: 'absolute', bottom: '0.5rem', right: '0.5rem',
-              background: 'rgba(0,0,0,0.6)', color: 'white', borderRadius: 'var(--radius-full)',
-              padding: '2px 8px', fontSize: '11px', fontWeight: 500,
-              display: 'flex', alignItems: 'center', gap: '3px',
-            }}>
-              <span className="material-symbols-outlined" style={{ fontSize: '14px' }}>photo_library</span>
-              {product.images.length}
-            </div>
-          )}
         </div>
       </Link>
-      <div className="product-card-body">
-        <Link href={`/products/${product.id}`}>
-          <h3 className="product-card-name">{product.name}</h3>
-        </Link>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
-          <span className="product-card-price">₹{product.price.toLocaleString('en-IN')}</span>
-          {product.originalPrice > product.price && (
-            <span className="product-card-original-price">₹{product.originalPrice.toLocaleString('en-IN')}</span>
-          )}
-        </div>
-        <div className="product-card-sku">SKU: {product.sku}</div>
-        <button
-          className={`product-card-btn ${inCart ? 'in-cart' : ''}`}
-          onClick={handleCart}
-          disabled={product.status !== 'available' && !inCart}
-        >
-          <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>
-            {inCart ? 'remove_shopping_cart' : 'add_shopping_cart'}
-          </span>
-          {inCart ? 'Remove from Cart' : 'Add to Trial Cart'}
-        </button>
-      </div>
+      <button
+        className={`product-card-cart-btn ${inCart ? 'in-cart' : ''}`}
+        onClick={handleToggleCart}
+        title={inCart ? 'Remove from cart' : 'Add to trial cart'}
+        style={{ position: 'absolute', bottom: 20, right: 20 }}
+      >
+        <span className="material-symbols-outlined" style={{ fontSize: 18 }}>
+          {inCart ? 'check' : 'add'}
+        </span>
+      </button>
+
       {toast && (
         <div style={{
-          position: 'fixed', bottom: '5rem', left: '50%', transform: 'translateX(-50%)',
-          background: 'var(--color-inverse-surface)', color: 'var(--color-inverse-on-surface)',
-          padding: '0.75rem 1.5rem', borderRadius: 'var(--radius-lg)', fontSize: '14px',
-          fontWeight: 500, zIndex: 9999, boxShadow: 'var(--shadow-xl)', animation: 'fadeInUp 0.3s ease-out',
+          position: 'absolute', bottom: -8, left: '50%', transform: 'translateX(-50%)',
+          background: 'var(--text)', color: 'var(--bg)',
+          padding: '8px 16px', borderRadius: 'var(--radius-full)',
+          fontSize: 13, fontWeight: 600, whiteSpace: 'nowrap',
+          boxShadow: 'var(--shadow-lg)', zIndex: 10,
+          animation: 'fadeInUp 0.3s ease-out',
         }}>
           {toast}
         </div>

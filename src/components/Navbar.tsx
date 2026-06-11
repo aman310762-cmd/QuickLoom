@@ -8,124 +8,65 @@ import { getCartCount } from '@/lib/api';
 export function Navbar() {
   const pathname = usePathname();
   const [cartCount, setCartCount] = useState(0);
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  const isAdmin = pathname?.startsWith('/admin');
-
   useEffect(() => {
-    const updateCount = () => setCartCount(getCartCount());
-    updateCount();
-    const interval = setInterval(updateCount, 500);
-    window.addEventListener('cartUpdated', updateCount);
-
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-
+    setCartCount(getCartCount());
+    const onCart = () => setCartCount(getCartCount());
+    window.addEventListener('cartUpdated', onCart);
+    window.addEventListener('storage', onCart);
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll);
     return () => {
-      clearInterval(interval);
-      window.removeEventListener('cartUpdated', updateCount);
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('cartUpdated', onCart);
+      window.removeEventListener('storage', onCart);
+      window.removeEventListener('scroll', onScroll);
     };
   }, []);
 
-  if (isAdmin) return null;
+  if (pathname?.startsWith('/admin')) return null;
 
-  const navLinks = [
+  const links = [
     { href: '/', label: 'Home' },
     { href: '/how-it-works', label: 'How It Works' },
     { href: '/categories/bedsheets', label: 'Products' },
     { href: '/contact', label: 'Contact' },
   ];
 
-  const isActive = (href: string) => {
-    if (href === '/') return pathname === '/';
-    return pathname?.startsWith(href);
-  };
-
   return (
-    <>
-      <nav className={`navbar ${scrolled ? 'scrolled' : ''}`}>
-        <div className="container navbar-inner">
-          <div className="navbar-left">
-            <Link href="/" className="navbar-logo">
-              <span className="navbar-logo-text">QuickLoom</span>
-            </Link>
-            <ul className="navbar-links">
-              {navLinks.map(link => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className={`navbar-link ${isActive(link.href) ? 'active' : ''}`}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+    <nav className="ql-nav" style={scrolled ? { boxShadow: '0 4px 20px oklch(0.3 0.06 50 / 0.08)' } : {}}>
+      <div className="ql-nav-inner">
+        <Link href="/" className="ql-nav-logo">
+          <div className="ql-nav-logo-diamond">
+            <div className="ql-nav-logo-diamond-inner" />
           </div>
+          <span className="ql-nav-brand">QuickLoom</span>
+        </Link>
 
-          <div className="navbar-right">
-            <span className="navbar-location">Gurgaon / Bhiwadi</span>
-            <Link href="/cart" className="navbar-icon-btn">
-              <span className="material-symbols-outlined">shopping_basket</span>
-              {cartCount > 0 && <span className="navbar-cart-count">{cartCount}</span>}
+        <div className="ql-nav-links">
+          {links.map(l => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className={`ql-nav-link ${pathname === l.href ? 'active' : ''}`}
+            >
+              {l.label}
             </Link>
-            <a
-              href="https://wa.me/919315807233"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="navbar-icon-btn"
-            >
-              <span className="material-symbols-outlined">chat</span>
-            </a>
-            <button
-              className="mobile-menu-btn"
-              onClick={() => setMobileOpen(true)}
-              aria-label="Open menu"
-            >
-              <span className="material-symbols-outlined">menu</span>
-            </button>
-          </div>
+          ))}
         </div>
-      </nav>
 
-      {mobileOpen && (
-        <>
-          <div className="mobile-menu-overlay" onClick={() => setMobileOpen(false)} />
-          <div className="mobile-menu">
-            <div className="mobile-menu-header">
-              <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '1.25rem', color: 'var(--color-primary)' }}>
-                QuickLoom
-              </span>
-              <button onClick={() => setMobileOpen(false)} style={{ fontSize: '1.5rem', color: 'var(--color-on-surface)' }}>
-                <span className="material-symbols-outlined">close</span>
-              </button>
-            </div>
-            <ul className="mobile-menu-links">
-              {navLinks.map(link => (
-                <li key={link.href}>
-                  <Link href={link.href} onClick={() => setMobileOpen(false)}>
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-              <li>
-                <Link href="/cart" onClick={() => setMobileOpen(false)}>
-                  🛒 Trial Cart ({cartCount})
-                </Link>
-              </li>
-              <li>
-                <Link href="/policies" onClick={() => setMobileOpen(false)}>
-                  Policies
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </>
-      )}
-    </>
+        <div className="ql-nav-actions">
+          <span className="ql-nav-location">📍 Gurgaon · Bhiwadi</span>
+          <Link href="/cart" className="ql-nav-cart">
+            <span className="material-symbols-outlined" style={{ fontSize: 20 }}>shopping_bag</span>
+            Trial Cart
+            {cartCount > 0 && <span className="ql-nav-cart-badge">{cartCount}</span>}
+          </Link>
+          <Link href="/categories/bedsheets" className="ql-nav-cta">
+            Start Free Trial
+          </Link>
+        </div>
+      </div>
+    </nav>
   );
 }

@@ -34,11 +34,27 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="admin-login">
-      <div className="admin-login-card">
-        <div style={{ textAlign: 'center', marginBottom: '0.5rem', fontSize: '2.5rem' }}>🧵</div>
-        <h1>QuickLoom Admin</h1>
-        <p className="subtitle">Sign in to manage your store</p>
+    <div style={{
+      minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: 'var(--bg)', padding: 20,
+    }}>
+      <div style={{
+        width: '100%', maxWidth: 420, background: 'var(--card)',
+        border: '1px solid var(--border)', borderRadius: 'var(--radius-xl)',
+        padding: 40, boxShadow: 'var(--shadow-xl)',
+      }}>
+        {/* Logo */}
+        <div style={{ textAlign: 'center', marginBottom: 32 }}>
+          <div style={{
+            width: 48, height: 48, borderRadius: 14, background: 'var(--accent)',
+            display: 'grid', placeItems: 'center', transform: 'rotate(45deg)',
+            margin: '0 auto 16px', boxShadow: '0 8px 24px oklch(0.62 0.19 35 / 0.4)',
+          }}>
+            <div style={{ width: 18, height: 18, borderRadius: 5, background: 'var(--bg)' }} />
+          </div>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 24, letterSpacing: -0.5 }}>QuickLoom Admin</h1>
+          <p style={{ color: 'var(--text-muted)', fontSize: 14, marginTop: 4 }}>Sign in to manage your store</p>
+        </div>
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -69,12 +85,8 @@ export default function AdminLoginPage() {
 
           {error && (
             <div style={{
-              padding: '0.75rem',
-              background: '#FEE2E2',
-              color: '#991B1B',
-              borderRadius: 'var(--radius-md)',
-              marginBottom: '1rem',
-              fontSize: '0.875rem',
+              padding: 12, background: 'oklch(0.94 0.06 25)', color: 'oklch(0.5 0.18 25)',
+              borderRadius: 'var(--radius-md)', marginBottom: 16, fontSize: 14,
             }}>
               {error}
             </div>
@@ -83,20 +95,20 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             className="btn btn-primary btn-lg"
-            style={{ width: '100%' }}
+            style={{ width: '100%', justifyContent: 'center' }}
             disabled={loading}
           >
             {loading ? (
-              <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span className="spinner" style={{ width: 18, height: 18, borderWidth: 2 }}></span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span className="spinner" style={{ width: 18, height: 18, borderWidth: 2 }} />
                 Signing in...
               </span>
             ) : 'Sign In'}
           </button>
         </form>
 
-        <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
-          <a href="/" style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
+        <div style={{ textAlign: 'center', marginTop: 24 }}>
+          <a href="/" style={{ fontSize: 14, color: 'var(--text-muted)' }}>
             ← Back to website
           </a>
         </div>

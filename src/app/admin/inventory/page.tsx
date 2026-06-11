@@ -87,7 +87,7 @@ export default function AdminInventoryPage() {
             className="admin-stat-card"
             style={{
               cursor: 'pointer',
-              border: statusFilter === status ? '2px solid var(--color-primary)' : undefined,
+              border: statusFilter === status ? '2px solid var(--accent)' : undefined,
             }}
             onClick={() => setStatusFilter(statusFilter === status ? '' : status)}
           >

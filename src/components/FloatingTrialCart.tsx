@@ -7,31 +7,27 @@ import { getCartCount } from '@/lib/api';
 
 export function FloatingTrialCart() {
   const pathname = usePathname();
-  const [cartCount, setCartCount] = useState(0);
-
-  const isAdmin = pathname?.startsWith('/admin');
-  const isCart = pathname === '/cart';
-  const isBook = pathname === '/book';
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
-    const updateCount = () => setCartCount(getCartCount());
-    updateCount();
-    const interval = setInterval(updateCount, 500);
-    window.addEventListener('cartUpdated', updateCount);
+    setCount(getCartCount());
+    const onCart = () => setCount(getCartCount());
+    window.addEventListener('cartUpdated', onCart);
+    window.addEventListener('storage', onCart);
     return () => {
-      clearInterval(interval);
-      window.removeEventListener('cartUpdated', updateCount);
+      window.removeEventListener('cartUpdated', onCart);
+      window.removeEventListener('storage', onCart);
     };
   }, []);
 
-  if (isAdmin || isCart || isBook) return null;
+  if (pathname?.startsWith('/admin') || pathname === '/cart' || count === 0) return null;
 
   return (
-    <div className="floating-trial-cart">
-      <Link href="/cart" className="floating-trial-cart-btn">
-        <span className="material-symbols-outlined">shopping_basket</span>
-        <span className="floating-trial-cart-label">{cartCount} of 10 items in Trial</span>
-        <span className="floating-trial-cart-view">View</span>
+    <div className="floating-cart">
+      <Link href="/cart" className="floating-cart-btn">
+        <span className="material-symbols-outlined" style={{ fontSize: 20 }}>shopping_bag</span>
+        View Trial Cart
+        <span className="floating-cart-badge">{count}</span>
       </Link>
     </div>
   );

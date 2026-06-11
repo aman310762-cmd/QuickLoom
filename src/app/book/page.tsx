@@ -58,13 +58,13 @@ export default function BookTrialPage() {
   ];
 
   return (
-    <div className="section" style={{ paddingTop: 'var(--space-xl)' }}>
+    <div style={{ paddingTop: 32, paddingBottom: 80 }}>
       <div className="container">
         <div className="book-trial-layout">
           {/* Form */}
           <div>
-            <h1 style={{ fontSize: '36px', marginBottom: '0.5rem' }}>Schedule Your Home Trial</h1>
-            <p style={{ color: 'var(--color-on-surface-variant)', fontSize: '16px', marginBottom: 'var(--space-xl)', lineHeight: 1.6 }}>
+            <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 'clamp(28px, 3.5vw, 42px)', letterSpacing: -1, marginBottom: 8 }}>Schedule Your Home Trial</h1>
+            <p style={{ color: 'var(--text-muted)', fontSize: 16, marginBottom: 32, lineHeight: 1.6 }}>
               Experience the texture and artistry of our handloom collection in your own space before you decide.
             </p>
 
@@ -153,8 +153,8 @@ export default function BookTrialPage() {
                 {error && (
                   <div style={{
                     padding: '0.75rem',
-                    background: 'var(--color-error-container)',
-                    color: 'var(--color-on-error-container)',
+                    background: 'oklch(0.94 0.06 25)',
+                    color: 'oklch(0.5 0.18 25)',
                     borderRadius: 'var(--radius-md)',
                     marginBottom: 'var(--space-md)',
                     fontSize: '14px',
@@ -181,7 +181,7 @@ export default function BookTrialPage() {
                     </>
                   )}
                 </button>
-                <p style={{ textAlign: 'center', fontSize: '13px', color: 'var(--color-on-surface-variant)', marginTop: '0.75rem' }}>
+                <p style={{ textAlign: 'center', fontSize: '13px', color: 'var(--text-muted)', marginTop: '0.75rem' }}>
                   No payment required today. Trial duration: 30 minutes.
                 </p>
               </form>
@@ -190,7 +190,7 @@ export default function BookTrialPage() {
 
           {/* Sidebar Summary */}
           <div>
-            <div className="cart-summary" style={{ background: 'var(--color-tertiary-fixed)', borderColor: 'transparent' }}>
+            <div className="cart-summary" style={{ background: 'var(--accent-light)', borderColor: 'transparent' }}>
               <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <span className="material-symbols-outlined">event_note</span>
                 Trial Summary
@@ -209,10 +209,10 @@ export default function BookTrialPage() {
                 background: 'rgba(16, 185, 129, 0.1)', borderRadius: 'var(--radius-md)',
                 padding: '0.75rem', margin: 'var(--space-md) 0',
               }}>
-                <span className="material-symbols-outlined" style={{ color: 'var(--color-success)', fontSize: '20px' }}>check_circle</span>
+                <span className="material-symbols-outlined" style={{ color: 'var(--success)', fontSize: '20px' }}>check_circle</span>
                 <div>
-                  <div style={{ fontWeight: 600, fontSize: '14px', color: 'var(--color-success)' }}>Same-day trial available</div>
-                  <div style={{ fontSize: '12px', color: 'var(--color-on-surface-variant)' }}>Order before 11 AM to see it today!</div>
+                  <div style={{ fontWeight: 600, fontSize: '14px', color: 'var(--success)' }}>Same-day trial available</div>
+                  <div style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Order before 11 AM to see it today!</div>
                 </div>
               </div>
 
@@ -222,18 +222,18 @@ export default function BookTrialPage() {
                   {cartProducts.map(p => (
                     <div key={p.id} style={{
                       width: '64px', height: '64px', borderRadius: 'var(--radius-md)',
-                      background: 'var(--color-surface-container)', display: 'flex',
+                      background: 'var(--bg-alt)', display: 'flex',
                       alignItems: 'center', justifyContent: 'center',
                     }}>
-                      <span className="material-symbols-outlined" style={{ fontSize: '1.5rem', color: 'var(--color-outline)' }}>image</span>
+                      <span className="material-symbols-outlined" style={{ fontSize: '1.5rem', color: 'var(--text-faint)' }}>image</span>
                     </div>
                   ))}
                   {cartCount > 3 && (
                     <div style={{
                       width: '64px', height: '64px', borderRadius: 'var(--radius-md)',
-                      background: 'var(--color-surface-container)', display: 'flex',
+                      background: 'var(--bg-alt)', display: 'flex',
                       alignItems: 'center', justifyContent: 'center',
-                      fontSize: '14px', fontWeight: 600, color: 'var(--color-on-surface-variant)',
+                      fontSize: '14px', fontWeight: 600, color: 'var(--text-muted)',
                     }}>
                       +{cartCount - 3}
                     </div>
@@ -241,7 +241,7 @@ export default function BookTrialPage() {
                 </div>
               )}
 
-              <a href="/policies" style={{ color: 'var(--color-primary)', fontSize: '14px', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+              <a href="/policies" style={{ color: 'var(--accent)', fontSize: '14px', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                 Read Trial Rules
                 <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>open_in_new</span>
               </a>
@@ -249,22 +249,22 @@ export default function BookTrialPage() {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-md)', marginTop: 'var(--space-md)' }}>
               <div style={{
-                background: 'var(--color-surface-container-lowest)',
-                border: '1px solid var(--color-outline-variant)',
+                background: 'var(--card)',
+                border: '1px solid var(--border)',
                 borderRadius: 'var(--radius-xl)', padding: 'var(--space-lg)',
                 textAlign: 'center',
               }}>
-                <span className="material-symbols-outlined" style={{ fontSize: '28px', color: 'var(--color-primary)', display: 'block', marginBottom: '0.5rem' }}>verified</span>
-                <span style={{ fontSize: '13px', fontWeight: 500, color: 'var(--color-on-surface-variant)' }}>100% Handloom Certified</span>
+                <span className="material-symbols-outlined" style={{ fontSize: '28px', color: 'var(--accent)', display: 'block', marginBottom: '0.5rem' }}>verified</span>
+                <span style={{ fontSize: '13px', fontWeight: 500, color: 'var(--text-muted)' }}>100% Handloom Certified</span>
               </div>
               <div style={{
-                background: 'var(--color-surface-container-lowest)',
-                border: '1px solid var(--color-outline-variant)',
+                background: 'var(--card)',
+                border: '1px solid var(--border)',
                 borderRadius: 'var(--radius-xl)', padding: 'var(--space-lg)',
                 textAlign: 'center',
               }}>
-                <span className="material-symbols-outlined" style={{ fontSize: '28px', color: 'var(--color-primary)', display: 'block', marginBottom: '0.5rem' }}>support_agent</span>
-                <span style={{ fontSize: '13px', fontWeight: 500, color: 'var(--color-on-surface-variant)' }}>24/7 Expert Styling Support</span>
+                <span className="material-symbols-outlined" style={{ fontSize: '28px', color: 'var(--accent)', display: 'block', marginBottom: '0.5rem' }}>support_agent</span>
+                <span style={{ fontSize: '13px', fontWeight: 500, color: 'var(--text-muted)' }}>24/7 Expert Styling Support</span>
               </div>
             </div>
           </div>
