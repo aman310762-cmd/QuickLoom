@@ -6,15 +6,15 @@ import { fetchVisibleProducts } from '@/lib/api';
 import { useEffect, useState, useRef } from 'react';
 
 const CATEGORY_IMAGES: Record<string, string> = {
-  bedsheets: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1200&q=85&auto=format&fit=crop',
-  curtains: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=1200&q=85&auto=format&fit=crop',
-  carpets: 'https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1200&q=85&auto=format&fit=crop',
-  rugs: 'https://images.unsplash.com/photo-1560448205-17d3e46c35e3?w=1200&q=85&auto=format&fit=crop',
-  towels: 'https://images.unsplash.com/photo-1583845112239-97ef1341b271?w=1200&q=85&auto=format&fit=crop',
-  'sofa-covers': 'https://images.unsplash.com/photo-1540574163026-643ea20ade25?w=1200&q=85&auto=format&fit=crop',
-  blankets: 'https://images.unsplash.com/photo-1580893246395-52aead8960dc?w=1200&q=85&auto=format&fit=crop',
-  mats: 'https://images.unsplash.com/photo-1591079406874-6c3cd7fd44e5?w=1200&q=85&auto=format&fit=crop',
-  'dining-covers': 'https://images.unsplash.com/photo-1614160859544-177611d0ed56?w=1200&q=85&auto=format&fit=crop',
+  bedsheets: '/images/categories/bedsheets.png',
+  curtains: '/images/categories/curtains.png',
+  carpets: '/images/categories/carpets.png',
+  rugs: '/images/categories/rugs.png',
+  towels: '/images/categories/towels.png',
+  'sofa-covers': '/images/categories/sofa-covers.png',
+  blankets: '/images/categories/bedsheets.png',
+  mats: '/images/categories/carpets.png',
+  'dining-covers': '/images/categories/curtains.png',
 };
 
 const CATEGORY_TAGS: Record<string, string> = {
@@ -122,7 +122,7 @@ export default function HomePage() {
           <div className="hero-image-card" ref={heroRef} onMouseMove={handleHeroMouseMove} onMouseLeave={handleHeroMouseLeave}>
             <div className="hero-image-inner">
               <img
-                src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=1200&q=85&auto=format&fit=crop"
+                src="/images/categories/bedsheets.png"
                 alt="Premium handloom textiles on a luxurious bed"
               />
             </div>
