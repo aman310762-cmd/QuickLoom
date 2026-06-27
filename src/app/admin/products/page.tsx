@@ -21,7 +21,16 @@ export default function AdminProductsPage() {
   });
 
   useEffect(() => {
-    fetchAllProducts().then(setProducts);
+    fetchAllProducts().then(all => {
+      setProducts(all);
+      const editId = new URLSearchParams(window.location.search).get('edit');
+      if (editId) {
+        const p = all.find(x => x.id === editId);
+        if (p) {
+          openEdit(p);
+        }
+      }
+    });
   }, []);
 
   const refresh = async () => setProducts(await fetchAllProducts());
@@ -46,7 +55,7 @@ export default function AdminProductsPage() {
     setShowModal(true);
   };
 
-  const openEdit = (p: Product) => {
+  function openEdit(p: Product) {
     setEditing(p);
     setImageUrls(p.images || []);
     setForm({
@@ -56,7 +65,7 @@ export default function AdminProductsPage() {
       color: p.color, pattern: p.pattern, sku: p.sku, serialNumber: p.serialNumber,
     });
     setShowModal(true);
-  };
+  }
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
