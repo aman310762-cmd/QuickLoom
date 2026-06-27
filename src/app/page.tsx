@@ -47,23 +47,23 @@ const PROBLEMS = [
   {
     icon: 'palette',
     title: 'Colour screen par alag, room mein alag',
-    desc: 'Aapne ek bedsheet order ki — photo mein dusty rose thi. Ghar aayi toh woh peach nikli. Screen ki brightness aur room ki lighting mein colour bilkul alag dikhta hai. Socho, ₹1500 kharch kiye aur shade match hi nahi hui!',
-    detail: 'Yahi hota hai jab aap sirf screen dekh kar decide karte hain.',
-    image: '/images/categories/bedsheets.png',
+    desc: 'Photo mein dusty rose dikhti hai, par ghar aakar woh peach nikli! Screen brightness aur room ki lighting mein colour bilkul badal jaata hai.',
+    solution: 'QuickLoom mein aap apne room ki light mein colour check karte hain — koi guess-work nahi.',
+    image: '/images/problems/colour-issue.png',
   },
   {
     icon: 'texture',
     title: 'Fabric ka feel photo mein nahi aata',
-    desc: 'Curtain ka photo dekh kar lagta hai — premium quality hai. Par jab ghar aata hai toh fabric patla nikalta hai, weave loose hota hai. Touch kiye bina softness, thickness aur quality ka andaaza lagana mushkil hai.',
-    detail: 'Photo zoom karo ya reviews padho — real feel kabhi nahi milega.',
-    image: '/images/categories/curtains.png',
+    desc: 'Photo mein curtain premium lagti hai, par ghar aakar patli aur see-through nikli! Touch kiye bina quality ka andaaza lagana mushkil hai.',
+    solution: 'QuickLoom mein aap fabric haath mein lekar feel karte hain — softness, thickness sab check hota hai.',
+    image: '/images/problems/fabric-issue.png',
   },
   {
     icon: 'assignment_return',
-    title: 'Return ka jhanjhat — shopping ka maza khatam',
-    desc: 'Product pasand nahi aaya toh pack karo, pickup schedule karo, 7-10 din refund ka wait karo. Kayi baar courier wapas nahi aata, refund atak jaata hai. Ek bedsheet return karne mein poore hafte ka tension ho jaata hai.',
-    detail: 'Return policy easy lagti hai — par process easy nahi hota.',
-    image: '/images/categories/sofa-covers.png',
+    title: 'Return ka jhanjhat — maza khatam',
+    desc: 'Pasand nahi aaya? Pack karo, pickup schedule karo, 7-10 din refund ka wait karo. Ek bedsheet return mein poore hafte ka tension.',
+    solution: 'QuickLoom mein jo pasand nahi — wahi par wapas. Koi packing, koi courier, koi wait nahi.',
+    image: '/images/problems/return-issue.png',
   },
 ];
 
@@ -161,26 +161,26 @@ export default function HomePage() {
         <div className="problem-hero-banner">
           <span className="section-label">Online shopping ki asli problem</span>
           <h2 className="problem-headline">
-            🛒 Online photo achhi lagti hai...<br />
+            Online photo achhi lagti hai...<br />
             <span className="problem-headline-highlight">Par ghar mein suit nahi karti!</span>
           </h2>
-          <p className="problem-hero-desc">Har online shopper ke saath yeh hota hai. Design pasand aata hai par ghar aakar lagta hai — <strong>yeh toh woh nahi jo maine socha tha.</strong> Neeche dekhiye kya kya problems aati hain:</p>
+          <p className="problem-hero-desc">Har online shopper ke saath yeh hota hai. Design pasand aata hai par ghar aakar lagta hai — <strong>yeh toh woh nahi jo maine socha tha.</strong></p>
         </div>
 
-        <div className="problem-stories">
+        <div className="problem-cards-row">
           {PROBLEMS.map((problem, idx) => (
-            <article className={`problem-story ${idx % 2 === 1 ? 'problem-story-reverse' : ''}`} key={problem.title}>
-              <div className="problem-story-image">
+            <article className="problem-compact-card" key={problem.title}>
+              <div className="problem-compact-image">
                 <img src={problem.image} alt={problem.title} />
-                <div className="problem-story-badge">
-                  <span className="material-symbols-outlined" aria-hidden="true">{problem.icon}</span>
-                </div>
               </div>
-              <div className="problem-story-content">
-                <span className="problem-story-num">Problem {idx + 1}</span>
-                <h3 className="problem-story-title">{problem.title}</h3>
-                <p className="problem-story-desc">{problem.desc}</p>
-                <p className="problem-story-detail">{problem.detail}</p>
+              <div className="problem-compact-body">
+                <span className="problem-compact-num">Problem {idx + 1}</span>
+                <h3>{problem.title}</h3>
+                <p>{problem.desc}</p>
+                <div className="problem-compact-solution">
+                  <span className="problem-compact-check">✅</span>
+                  <span>{problem.solution}</span>
+                </div>
               </div>
             </article>
           ))}
@@ -201,8 +201,10 @@ export default function HomePage() {
       <section id="how" className="how-section">
         <div className="section-heading-centered">
           <span className="section-label">Bas 3 simple steps</span>
-          <h2 className="section-title">Aapka ghar hi trial room hai.</h2>
-          <p className="section-desc">No advance. No awkward sales pressure. No return courier.</p>
+          <h2 className="how-headline">
+            Aapka ghar hi <em>trial room</em> hai.
+          </h2>
+          <p className="how-subtitle">No advance. No awkward sales pressure. No return courier.</p>
         </div>
         <div className="steps-grid">
           {STEPS.map(step => (
