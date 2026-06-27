@@ -63,7 +63,7 @@ export function Navbar() {
             {cartCount > 0 && <span className="ql-nav-cart-badge">{cartCount}</span>}
           </Link>
           <Link href="/categories/bedsheets" className="ql-nav-cta">
-            Start Free Trial
+            Book Free Home Trial
           </Link>
         </div>
       </div>
