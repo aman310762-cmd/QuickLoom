@@ -38,15 +38,33 @@ const CATEGORY_COLORS: Record<string, { deep: string; tint: string }> = {
 };
 
 const CATEGORY_PRICES: Record<string, string> = {
-  bedsheets: 'From ₹1,899', curtains: 'From ₹1,599', carpets: 'From ₹3,999',
-  rugs: 'From ₹1,899', towels: 'From ₹899', 'sofa-covers': 'From ₹899',
-  blankets: 'From ₹1,299', mats: 'From ₹599', 'dining-covers': 'From ₹699',
+  bedsheets: 'From ₹499', curtains: 'From ₹399', carpets: 'From ₹999',
+  rugs: 'From ₹699', towels: 'From ₹299', 'sofa-covers': 'From ₹399',
+  blankets: 'From ₹499', mats: 'From ₹299', 'dining-covers': 'From ₹349',
 };
 
 const PROBLEMS = [
-  { icon: 'palette', title: 'Colour ka doubt', desc: 'Screen par jo shade dikhta hai, woh room ki light mein alag lag sakta hai.' },
-  { icon: 'texture', title: 'Fabric feel nahi hota', desc: 'Softness, weave aur quality photo dekh kar judge karna mushkil hai.' },
-  { icon: 'assignment_return', title: 'Return ka headache', desc: 'Packing, pickup aur refund ke chakkar mein shopping ka maza khatam ho jata hai.' },
+  {
+    icon: 'palette',
+    title: 'Colour screen par alag, room mein alag',
+    desc: 'Aapne ek bedsheet order ki — photo mein dusty rose thi. Ghar aayi toh woh peach nikli. Screen ki brightness aur room ki lighting mein colour bilkul alag dikhta hai. Socho, ₹1500 kharch kiye aur shade match hi nahi hui!',
+    detail: 'Yahi hota hai jab aap sirf screen dekh kar decide karte hain.',
+    image: '/images/categories/bedsheets.png',
+  },
+  {
+    icon: 'texture',
+    title: 'Fabric ka feel photo mein nahi aata',
+    desc: 'Curtain ka photo dekh kar lagta hai — premium quality hai. Par jab ghar aata hai toh fabric patla nikalta hai, weave loose hota hai. Touch kiye bina softness, thickness aur quality ka andaaza lagana mushkil hai.',
+    detail: 'Photo zoom karo ya reviews padho — real feel kabhi nahi milega.',
+    image: '/images/categories/curtains.png',
+  },
+  {
+    icon: 'assignment_return',
+    title: 'Return ka jhanjhat — shopping ka maza khatam',
+    desc: 'Product pasand nahi aaya toh pack karo, pickup schedule karo, 7-10 din refund ka wait karo. Kayi baar courier wapas nahi aata, refund atak jaata hai. Ek bedsheet return karne mein poore hafte ka tension ho jaata hai.',
+    detail: 'Return policy easy lagti hai — par process easy nahi hota.',
+    image: '/images/categories/sofa-covers.png',
+  },
 ];
 
 const STEPS = [
@@ -88,24 +106,21 @@ export default function HomePage() {
         <div className="hero-content">
           <span className="hero-badge">Gurgaon &amp; Bhiwadi mein free home trial</span>
           <h1 className="hero-title">
-            Online photo achhi lagti hai.<br />
-            Par ghar mein <em>suit karegi?</em>
+            Bedsheet online nahi,<br />
+            <em>family ke saath</em> choose karein.
           </h1>
           <p className="hero-subtitle">
             QuickLoom <strong>10 handloom products aapke ghar laata hai.</strong> Apne bed aur room mein dekhiye, fabric feel kariye, aur jo pasand aaye sirf uska payment kariye.
           </p>
           <div className="hero-actions">
-            <Link href="/categories/bedsheets" className="btn-pill btn-pill-accent">
-              10 designs ghar par try karein
+            <Link href="/categories/bedsheets" className="btn-pill btn-pill-accent btn-pill-lg hero-cta-main">
+              👉 Abhi 10 products add karein
               <span aria-hidden="true">→</span>
             </Link>
-            <a href={WHATSAPP_URL} className="btn-pill btn-pill-outline">
-              WhatsApp par designs dekhein
-            </a>
           </div>
           <div className="hero-trust" aria-label="Trial benefits">
             <span><span className="check">✓</span> ₹0 advance</span>
-            <span><span className="check">✓</span> No purchase pressure</span>
+            <span><span className="check">✓</span> Koi pressure nahi</span>
             <span><span className="check">✓</span> 30-min trial</span>
           </div>
         </div>
@@ -127,14 +142,6 @@ export default function HomePage() {
                 <span>Phir decide karo</span>
               </div>
             </div>
-            <div className="hero-float-badge hero-float-badge-top">
-              <span className="hero-float-badge-icon">10</span>
-              <div><strong>Designs aapke ghar</strong><small>Ek hi trial mein</small></div>
-            </div>
-            <div className="hero-float-badge hero-float-badge-bottom">
-              <span className="hero-status-dot" />
-              <div><strong>Jo pasand aaye wahi rakho</strong><small>Baaki on-the-spot return</small></div>
-            </div>
           </div>
         </div>
       </section>
@@ -151,23 +158,43 @@ export default function HomePage() {
       </div>
 
       <section className="problem-section">
-        <div className="problem-heading">
+        <div className="problem-hero-banner">
           <span className="section-label">Online shopping ki asli problem</span>
-          <h2 className="section-title">Bedsheet sirf screen par choose nahi hoti.</h2>
-          <p className="section-desc">Design tabhi sahi lagta hai jab woh aapke furniture, lighting aur room ke saath fit baithe.</p>
+          <h2 className="problem-headline">
+            🛒 Online photo achhi lagti hai...<br />
+            <span className="problem-headline-highlight">Par ghar mein suit nahi karti!</span>
+          </h2>
+          <p className="problem-hero-desc">Har online shopper ke saath yeh hota hai. Design pasand aata hai par ghar aakar lagta hai — <strong>yeh toh woh nahi jo maine socha tha.</strong> Neeche dekhiye kya kya problems aati hain:</p>
         </div>
-        <div className="problem-grid">
-          {PROBLEMS.map(problem => (
-            <article className="problem-item" key={problem.title}>
-              <span className="material-symbols-outlined problem-icon" aria-hidden="true">{problem.icon}</span>
-              <h3>{problem.title}</h3>
-              <p>{problem.desc}</p>
+
+        <div className="problem-stories">
+          {PROBLEMS.map((problem, idx) => (
+            <article className={`problem-story ${idx % 2 === 1 ? 'problem-story-reverse' : ''}`} key={problem.title}>
+              <div className="problem-story-image">
+                <img src={problem.image} alt={problem.title} />
+                <div className="problem-story-badge">
+                  <span className="material-symbols-outlined" aria-hidden="true">{problem.icon}</span>
+                </div>
+              </div>
+              <div className="problem-story-content">
+                <span className="problem-story-num">Problem {idx + 1}</span>
+                <h3 className="problem-story-title">{problem.title}</h3>
+                <p className="problem-story-desc">{problem.desc}</p>
+                <p className="problem-story-detail">{problem.detail}</p>
+              </div>
             </article>
           ))}
         </div>
-        <div className="solution-band">
-          <span className="solution-kicker">QuickLoom ka simple solution</span>
-          <p><strong>Store ko ghar le aao.</strong> Product ko real room mein dekho, touch karo, compare karo, phir khareedo.</p>
+
+        <div className="solution-band-big">
+          <div className="solution-band-inner">
+            <span className="solution-band-emoji">💡</span>
+            <div>
+              <span className="solution-kicker">QuickLoom ka simple solution</span>
+              <h3 className="solution-band-title">Store ko ghar le aao.</h3>
+              <p>Product ko apne real room mein dekho, touch karo, family ke saath compare karo — phir decide karo. <strong>Koi advance payment nahi, koi pressure nahi.</strong></p>
+            </div>
+          </div>
         </div>
       </section>
 
