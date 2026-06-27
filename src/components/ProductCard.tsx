@@ -34,6 +34,7 @@ export function ProductCard({ product }: { product: Product }) {
   };
 
   const imgSrc = product.images?.[0] || '';
+  const isAvailable = product.status === 'available';
 
   return (
     <div className="product-card" style={{ position: 'relative' }}>
@@ -48,6 +49,9 @@ export function ProductCard({ product }: { product: Product }) {
           )}
           {product.material && (
             <span className="product-card-badge">{product.material.split(',')[0].trim()}</span>
+          )}
+          {!isAvailable && (
+            <span className="product-card-status">Currently unavailable</span>
           )}
         </div>
         <div className="product-card-body">
@@ -68,11 +72,12 @@ export function ProductCard({ product }: { product: Product }) {
       <button
         className={`product-card-cart-btn ${inCart ? 'in-cart' : ''}`}
         onClick={handleToggleCart}
-        title={inCart ? 'Remove from cart' : 'Add to trial cart'}
+        disabled={!isAvailable && !inCart}
+        title={!isAvailable ? 'Currently unavailable' : inCart ? 'Remove from cart' : 'Add to trial cart'}
         style={{ position: 'absolute', bottom: 20, right: 20 }}
       >
         <span className="material-symbols-outlined" style={{ fontSize: 18 }}>
-          {inCart ? 'check' : 'add'}
+          {!isAvailable ? 'block' : inCart ? 'check' : 'add'}
         </span>
       </button>
 

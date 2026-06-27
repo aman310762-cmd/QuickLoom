@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+const NO_STORE_HEADERS = {
+  'Cache-Control': 'no-store, max-age=0',
+};
+
 // GET /api/products — fetch all products
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -19,12 +26,12 @@ export async function GET(request: NextRequest) {
   const { data, error } = await query;
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 500, headers: NO_STORE_HEADERS });
   }
 
   // Map snake_case DB columns to camelCase for frontend
   const products = (data || []).map(mapProduct);
-  return NextResponse.json(products);
+  return NextResponse.json(products, { headers: NO_STORE_HEADERS });
 }
 
 // POST /api/products — create a product
@@ -52,10 +59,10 @@ export async function POST(request: NextRequest) {
   }).select().single();
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: 500, headers: NO_STORE_HEADERS });
   }
 
-  return NextResponse.json(mapProduct(data));
+  return NextResponse.json(mapProduct(data), { status: 201, headers: NO_STORE_HEADERS });
 }
 
 // Helper: map DB row to frontend shape

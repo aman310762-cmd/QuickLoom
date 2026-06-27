@@ -73,21 +73,51 @@ export default function ProductDetailPage() {
   const [cartCount, setCartCount] = useState(0);
   const [toast, setToast] = useState('');
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [loadState, setLoadState] = useState<'loading' | 'ready' | 'not-found' | 'error'>('loading');
+  const [retryCount, setRetryCount] = useState(0);
 
   useEffect(() => {
+    let cancelled = false;
+
     const load = async () => {
-      const p = await fetchProductById(id);
-      if (p) {
+      if (!id) return;
+
+      setLoadState('loading');
+      setProduct(null);
+      setSimilar([]);
+
+      try {
+        const p = await fetchProductById(id);
+        if (cancelled) return;
+
+        if (!p) {
+          setLoadState('not-found');
+          return;
+        }
+
         setProduct(p);
+        setLoadState('ready');
         setInCart(isInCart(p.id));
-        const catProducts = await fetchProductsByCategory(p.category);
-        setSimilar(catProducts.filter(sp => sp.id !== p.id).slice(0, 4));
         setSelectedImageIndex(0);
+        setCartCount(getCartCount());
+
+        try {
+          const catProducts = await fetchProductsByCategory(p.category);
+          if (!cancelled) setSimilar(catProducts.filter(sp => sp.id !== p.id).slice(0, 4));
+        } catch {
+          if (!cancelled) setSimilar([]);
+        }
+      } catch (error) {
+        console.error('Product load failed:', error);
+        if (!cancelled) setLoadState('error');
       }
-      setCartCount(getCartCount());
     };
-    load();
-  }, [id]);
+
+    void load();
+    return () => {
+      cancelled = true;
+    };
+  }, [id, retryCount]);
 
   const handleCart = () => {
     if (!product) return;
@@ -109,11 +139,42 @@ export default function ProductDetailPage() {
     setTimeout(() => setToast(''), 2500);
   };
 
-  if (!product) {
+  if (loadState === 'loading') {
     return (
-      <div className="container" style={{ padding: '80px 0', textAlign: 'center' }}>
+      <div className="container product-loading" aria-live="polite" aria-busy="true">
+        <div className="product-loading-grid">
+          <div className="catalog-skeleton product-image-skeleton" />
+          <div className="product-info-skeleton">
+            <div className="catalog-skeleton skeleton-line skeleton-short" />
+            <div className="catalog-skeleton skeleton-line skeleton-title" />
+            <div className="catalog-skeleton skeleton-line skeleton-price" />
+            <div className="catalog-skeleton skeleton-line" />
+            <div className="catalog-skeleton skeleton-line" />
+            <div className="catalog-skeleton skeleton-button" />
+          </div>
+        </div>
+        <span className="sr-only">Loading product details</span>
+      </div>
+    );
+  }
+
+  if (loadState === 'error') {
+    return (
+      <div className="container catalog-state-message" role="alert">
+        <span className="material-symbols-outlined">cloud_off</span>
+        <h2>We couldn&apos;t load this product</h2>
+        <p>Your product is still safely stored. Please check your connection and try again.</p>
+        <button className="btn btn-primary" onClick={() => setRetryCount(count => count + 1)}>Try Again</button>
+      </div>
+    );
+  }
+
+  if (loadState === 'not-found' || !product) {
+    return (
+      <div className="container catalog-state-message">
         <span className="material-symbols-outlined" style={{ fontSize: 64, color: 'var(--text-faint)' }}>inventory_2</span>
         <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, marginTop: 16 }}>Product not found</h2>
+        <p>This product may be hidden or the link may be incorrect.</p>
         <Link href="/" className="btn btn-primary" style={{ marginTop: 16 }}>Go Home</Link>
       </div>
     );

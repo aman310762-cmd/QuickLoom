@@ -1,9 +1,9 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { fetchProductsByCategory, getCartCount } from '@/lib/api';
+import { fetchProductsByCategory } from '@/lib/api';
 import { CATEGORIES, Category, Product } from '@/lib/types';
 import { ProductCard } from '@/components/ProductCard';
 
@@ -11,24 +11,44 @@ export default function CategoryPage() {
   const params = useParams();
   const slug = params?.slug as Category;
   const [allCategoryProducts, setAllCategoryProducts] = useState<Product[]>([]);
-  const [products, setProducts] = useState<Product[]>([]);
   const [sortBy, setSortBy] = useState<'newest' | 'price-asc' | 'price-desc'>('newest');
   const [colorFilter, setColorFilter] = useState('');
   const [priceMax, setPriceMax] = useState<number | undefined>();
+  const [loadState, setLoadState] = useState<'loading' | 'ready' | 'error'>('loading');
+  const [retryCount, setRetryCount] = useState(0);
 
   const category = CATEGORIES.find(c => c.slug === slug);
 
   useEffect(() => {
-    fetchProductsByCategory(slug).then(setAllCategoryProducts);
-  }, [slug]);
+    let cancelled = false;
 
-  useEffect(() => {
+    const load = async () => {
+      setLoadState('loading');
+      try {
+        const loadedProducts = await fetchProductsByCategory(slug);
+        if (!cancelled) {
+          setAllCategoryProducts(loadedProducts);
+          setLoadState('ready');
+        }
+      } catch (error) {
+        console.error('Category products load failed:', error);
+        if (!cancelled) setLoadState('error');
+      }
+    };
+
+    if (slug) void load();
+    return () => {
+      cancelled = true;
+    };
+  }, [slug, retryCount]);
+
+  const products = useMemo(() => {
     let filtered = [...allCategoryProducts];
     if (colorFilter) filtered = filtered.filter(p => p.color === colorFilter);
     if (priceMax) filtered = filtered.filter(p => p.price <= priceMax);
     if (sortBy === 'price-asc') filtered.sort((a, b) => a.price - b.price);
     else if (sortBy === 'price-desc') filtered.sort((a, b) => b.price - a.price);
-    setProducts(filtered);
+    return filtered;
   }, [allCategoryProducts, sortBy, colorFilter, priceMax]);
 
   const uniqueColors = [...new Set(allCategoryProducts.map(p => p.color))];
@@ -60,7 +80,7 @@ export default function CategoryPage() {
         <div style={{ marginBottom: 32 }}>
           <h1 className="section-title" style={{ fontSize: 'clamp(28px, 3.5vw, 42px)' }}>{category.name}</h1>
           <p style={{ color: 'var(--text-muted)', fontSize: 16, marginTop: 4 }}>
-            {products.length} items found in artisanal collection
+            {loadState === 'loading' ? 'Loading collection...' : `${products.length} items found in artisanal collection`}
           </p>
         </div>
 
@@ -98,7 +118,25 @@ export default function CategoryPage() {
         </div>
 
         {/* Products Grid */}
-        {products.length > 0 ? (
+        {loadState === 'loading' ? (
+          <div className="products-grid" aria-live="polite" aria-busy="true">
+            {Array.from({ length: 6 }, (_, index) => (
+              <div className="product-card-skeleton" key={index}>
+                <div className="catalog-skeleton skeleton-card-image" />
+                <div className="catalog-skeleton skeleton-line skeleton-short" />
+                <div className="catalog-skeleton skeleton-line" />
+                <div className="catalog-skeleton skeleton-line skeleton-price" />
+              </div>
+            ))}
+          </div>
+        ) : loadState === 'error' ? (
+          <div className="catalog-state-message" role="alert">
+            <span className="material-symbols-outlined">cloud_off</span>
+            <h3>Products couldn&apos;t be loaded</h3>
+            <p>Your catalog is still safely stored. Please check your connection and try again.</p>
+            <button className="btn btn-primary" onClick={() => setRetryCount(count => count + 1)}>Try Again</button>
+          </div>
+        ) : products.length > 0 ? (
           <div className="products-grid">
             {products.map(product => (
               <ProductCard key={product.id} product={product} />

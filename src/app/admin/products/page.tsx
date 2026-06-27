@@ -12,6 +12,7 @@ export default function AdminProductsPage() {
   const [filter, setFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [uploadingImages, setUploadingImages] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [form, setForm] = useState({
@@ -80,8 +81,13 @@ export default function AdminProductsPage() {
     try {
       const res = await fetch('/api/upload', { method: 'POST', body: formData });
       const data = await res.json();
-      if (data.urls) {
+      if (!res.ok) {
+        throw new Error(data.error || 'Image upload failed');
+      }
+      if (data.urls?.length) {
         setImageUrls(prev => [...prev, ...data.urls]);
+      } else {
+        throw new Error('No images were uploaded. Please check the file type and try again.');
       }
     } catch (err) {
       console.error('Upload failed:', err);
@@ -131,13 +137,24 @@ export default function AdminProductsPage() {
       isVisible: true,
     };
 
-    if (editing) {
-      await apiUpdateProduct(editing.id, productData);
-    } else {
-      await apiCreateProduct(productData);
+    setIsSaving(true);
+    try {
+      const savedProduct = editing
+        ? await apiUpdateProduct(editing.id, productData)
+        : await apiCreateProduct(productData);
+
+      if (!savedProduct) {
+        throw new Error('Supabase did not confirm the product save. Please try again.');
+      }
+
+      await refresh();
+      setShowModal(false);
+    } catch (error) {
+      console.error('Product save failed:', error);
+      alert(error instanceof Error ? error.message : 'Product save failed. Please try again.');
+    } finally {
+      setIsSaving(false);
     }
-    setShowModal(false);
-    await refresh();
   };
 
   const handleDelete = async (id: string) => {
@@ -424,9 +441,9 @@ export default function AdminProductsPage() {
             </div>
 
             <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
-              <button className="btn btn-primary" onClick={handleSave} style={{ flex: 1 }}>
-                <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>{editing ? 'save' : 'add_circle'}</span>
-                {editing ? 'Save Changes' : 'Create Product'}
+              <button className="btn btn-primary" onClick={handleSave} disabled={isSaving || uploadingImages} style={{ flex: 1 }}>
+                <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>{isSaving ? 'progress_activity' : editing ? 'save' : 'add_circle'}</span>
+                {isSaving ? 'Saving to Supabase...' : editing ? 'Save Changes' : 'Create Product'}
               </button>
               <button className="btn btn-ghost" onClick={() => setShowModal(false)}>Cancel</button>
             </div>

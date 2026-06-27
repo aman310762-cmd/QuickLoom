@@ -2,6 +2,45 @@ import { Product, Booking } from '@/lib/types';
 
 const BASE = '';
 
+export class ApiRequestError extends Error {
+  constructor(message: string, public status?: number) {
+    super(message);
+    this.name = 'ApiRequestError';
+  }
+}
+
+async function readErrorMessage(response: Response): Promise<string> {
+  try {
+    const payload = await response.json();
+    return payload.error || `Request failed (${response.status})`;
+  } catch {
+    return `Request failed (${response.status})`;
+  }
+}
+
+async function fetchPublicJson<T>(url: string, attempts = 2): Promise<T> {
+  let lastError: unknown;
+
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    try {
+      const response = await fetch(url, { cache: 'no-store' });
+      if (response.ok) return response.json();
+
+      const message = await readErrorMessage(response);
+      const error = new ApiRequestError(message, response.status);
+      if (response.status < 500 || attempt === attempts - 1) throw error;
+      lastError = error;
+    } catch (error) {
+      lastError = error;
+      if (error instanceof ApiRequestError && error.status && error.status < 500) throw error;
+      if (attempt === attempts - 1) break;
+    }
+  }
+
+  if (lastError instanceof Error) throw lastError;
+  throw new ApiRequestError('Unable to load products. Please try again.');
+}
+
 // ============================================
 // PRODUCTS
 // ============================================
@@ -12,21 +51,20 @@ export async function fetchAllProducts(): Promise<Product[]> {
 }
 
 export async function fetchVisibleProducts(): Promise<Product[]> {
-  const res = await fetch(`${BASE}/api/products?visible=true`);
-  if (!res.ok) return [];
-  return res.json();
+  return fetchPublicJson<Product[]>(`${BASE}/api/products?visible=true`);
 }
 
 export async function fetchProductsByCategory(category: string): Promise<Product[]> {
-  const res = await fetch(`${BASE}/api/products?category=${category}&visible=true`);
-  if (!res.ok) return [];
-  return res.json();
+  return fetchPublicJson<Product[]>(`${BASE}/api/products?category=${encodeURIComponent(category)}&visible=true`);
 }
 
 export async function fetchProductById(id: string): Promise<Product | null> {
-  const res = await fetch(`${BASE}/api/products/${id}`);
-  if (!res.ok) return null;
-  return res.json();
+  try {
+    return await fetchPublicJson<Product>(`${BASE}/api/products/${encodeURIComponent(id)}`);
+  } catch (error) {
+    if (error instanceof ApiRequestError && error.status === 404) return null;
+    throw error;
+  }
 }
 
 export async function createProduct(data: Partial<Product>): Promise<Product | null> {
