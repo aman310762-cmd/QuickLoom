@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRef } from 'react';
 import { CATEGORIES } from '@/lib/types';
 
@@ -27,14 +28,14 @@ const CATEGORY_TAGS: Record<string, string> = {
 
 const CATEGORY_COLORS: Record<string, { deep: string; tint: string }> = {
   bedsheets: { deep: 'oklch(0.5 0.15 35)', tint: 'oklch(0.94 0.04 35)' },
-  curtains: { deep: 'oklch(0.5 0.15 80)', tint: 'oklch(0.94 0.04 80)' },
-  carpets: { deep: 'oklch(0.5 0.15 150)', tint: 'oklch(0.94 0.04 150)' },
-  rugs: { deep: 'oklch(0.5 0.15 210)', tint: 'oklch(0.94 0.04 210)' },
-  towels: { deep: 'oklch(0.5 0.15 265)', tint: 'oklch(0.94 0.04 265)' },
-  'sofa-covers': { deep: 'oklch(0.5 0.15 320)', tint: 'oklch(0.94 0.04 320)' },
+  curtains: { deep: 'oklch(0.5 0.15 35)', tint: 'oklch(0.94 0.04 35)' },
+  carpets: { deep: 'oklch(0.5 0.15 35)', tint: 'oklch(0.94 0.04 35)' },
+  rugs: { deep: 'oklch(0.5 0.15 35)', tint: 'oklch(0.94 0.04 35)' },
+  towels: { deep: 'oklch(0.5 0.15 35)', tint: 'oklch(0.94 0.04 35)' },
+  'sofa-covers': { deep: 'oklch(0.5 0.15 35)', tint: 'oklch(0.94 0.04 35)' },
   blankets: { deep: 'oklch(0.5 0.15 35)', tint: 'oklch(0.94 0.04 35)' },
-  mats: { deep: 'oklch(0.5 0.15 150)', tint: 'oklch(0.94 0.04 150)' },
-  'dining-covers': { deep: 'oklch(0.5 0.15 265)', tint: 'oklch(0.94 0.04 265)' },
+  mats: { deep: 'oklch(0.5 0.15 35)', tint: 'oklch(0.94 0.04 35)' },
+  'dining-covers': { deep: 'oklch(0.5 0.15 35)', tint: 'oklch(0.94 0.04 35)' },
 };
 
 const CATEGORY_PRICES: Record<string, string> = {
@@ -49,7 +50,7 @@ const PROBLEMS = [
     title: 'Colour screen par alag, room mein alag',
     desc: 'Photo mein dusty rose dikhti hai, par ghar aakar woh peach nikli! Screen brightness aur room ki lighting mein colour bilkul badal jaata hai.',
     solution: 'QuickLoom mein aap apne room ki light mein colour check karte hain — koi guess-work nahi.',
-    image: '/images/problems/colour-issue.png',
+    image: '/images/problems/colour-issue-v3.png',
   },
   {
     icon: 'texture',
@@ -159,27 +160,38 @@ export default function HomePage() {
 
       <section className="problem-section">
         <div className="problem-hero-banner">
-          <span className="section-label">Online shopping ki asli problem</span>
-          <h2 className="problem-headline">
-            Online photo achhi lagti hai...<br />
-            <span className="problem-headline-highlight">Par ghar mein suit nahi karti!</span>
+          <h2 className="problem-kicker">
+            <span aria-hidden="true">!</span>
+            Online shopping ki asli problem
           </h2>
-          <p className="problem-hero-desc">Har online shopper ke saath yeh hota hai. Design pasand aata hai par ghar aakar lagta hai — <strong>yeh toh woh nahi jo maine socha tha.</strong></p>
+          <p className="problem-headline">
+            Online photo achhi lagti hai...{' '}
+            <span className="problem-headline-highlight">Par ghar mein suit nahi karti!</span>
+          </p>
         </div>
 
         <div className="problem-cards-row">
           {PROBLEMS.map((problem, idx) => (
             <article className="problem-compact-card" key={problem.title}>
               <div className="problem-compact-image">
-                <img src={problem.image} alt={problem.title} />
+                <Image
+                  src={problem.image}
+                  alt={problem.title}
+                  width={1024}
+                  height={1024}
+                  sizes="(max-width: 900px) calc(100vw - 40px), 33vw"
+                />
               </div>
               <div className="problem-compact-body">
                 <span className="problem-compact-num">Problem {idx + 1}</span>
                 <h3>{problem.title}</h3>
                 <p>{problem.desc}</p>
                 <div className="problem-compact-solution">
-                  <span className="problem-compact-check">✅</span>
-                  <span>{problem.solution}</span>
+                  <span className="problem-compact-check" aria-hidden="true">✓</span>
+                  <span>
+                    <strong>QuickLoom fix</strong>
+                    {problem.solution}
+                  </span>
                 </div>
               </div>
             </article>
