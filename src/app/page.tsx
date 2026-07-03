@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { useRef } from 'react';
 import { CATEGORIES } from '@/lib/types';
 
+const LIVE_CATEGORIES = ['bedsheets', 'curtains', 'sofa-covers'];
+
 const WHATSAPP_URL =
   'https://wa.me/919315807233?text=Hi%20QuickLoom%2C%20mujhe%20free%20home%20trial%20ke%20designs%20dekhne%20hain.';
 
@@ -15,9 +17,9 @@ const CATEGORY_IMAGES: Record<string, string> = {
   rugs: '/images/categories/rugs.png',
   towels: '/images/categories/towels.png',
   'sofa-covers': '/images/categories/sofa-covers.png',
-  blankets: '/images/categories/bedsheets.png',
-  mats: '/images/categories/carpets.png',
-  'dining-covers': '/images/categories/curtains.png',
+  blankets: '/images/categories/blankets.png',
+  mats: '/images/categories/mats.png',
+  'dining-covers': '/images/categories/dining-covers.png',
 };
 
 const CATEGORY_TAGS: Record<string, string> = {
@@ -86,8 +88,8 @@ const MARQUEE_ITEMS = ['₹0 Advance', '10 Products at Home', '30-Minute Trial',
 
 export default function HomePage() {
   const heroRef = useRef<HTMLDivElement>(null);
-  const mainCategories = CATEGORIES.slice(0, 6);
-  const smallCategories = CATEGORIES.slice(6);
+  const liveCategories = CATEGORIES.filter(c => LIVE_CATEGORIES.includes(c.slug));
+  const upcomingCategories = CATEGORIES.filter(c => !LIVE_CATEGORIES.includes(c.slug));
 
   const handleHeroMouseMove = (event: React.MouseEvent) => {
     if (!heroRef.current) return;
@@ -238,8 +240,9 @@ export default function HomePage() {
             </div>
             <p>Category kholiye, pasand ke products Trial Cart mein add kariye aur convenient slot book kariye.</p>
           </div>
+          {/* Live Categories */}
           <div className="categories-grid">
-            {mainCategories.map(category => {
+            {liveCategories.map(category => {
               const colors = CATEGORY_COLORS[category.slug] || CATEGORY_COLORS.bedsheets;
               return (
                 <Link key={category.slug} href={`/categories/${category.slug}`} className="category-card">
@@ -258,18 +261,34 @@ export default function HomePage() {
               );
             })}
           </div>
-          {smallCategories.length > 0 && (
-            <div className="small-cat-pills">
-              {smallCategories.map(category => {
-                const colors = CATEGORY_COLORS[category.slug] || CATEGORY_COLORS.bedsheets;
-                return (
-                  <Link key={category.slug} href={`/categories/${category.slug}`} className="small-cat-pill">
-                    <span className="small-cat-dot" style={{ background: colors.deep }} />
-                    {category.name}
-                    <span className="small-cat-price">{CATEGORY_PRICES[category.slug]}</span>
-                  </Link>
-                );
-              })}
+
+          {/* Upcoming Categories */}
+          {upcomingCategories.length > 0 && (
+            <div style={{ marginTop: 48 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
+                <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 22, letterSpacing: '-0.3px' }}>Coming Soon</h3>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: 1, textTransform: 'uppercase', color: 'var(--text-faint)', background: 'var(--bg-alt)', padding: '4px 10px', borderRadius: 'var(--radius-full)', border: '1px solid var(--border)' }}>Upcoming</span>
+              </div>
+              <div className="categories-grid upcoming-grid">
+                {upcomingCategories.map(category => {
+                  const colors = CATEGORY_COLORS[category.slug] || CATEGORY_COLORS.bedsheets;
+                  return (
+                    <div key={category.slug} className="category-card upcoming-card">
+                      <div className="category-card-image">
+                        <img src={CATEGORY_IMAGES[category.slug]} alt={category.name} style={{ filter: 'grayscale(0.6) opacity(0.6)' }} />
+                        <span className="category-card-tag" style={{ background: 'var(--text-muted)' }}>Coming Soon</span>
+                      </div>
+                      <div className="category-card-body">
+                        <div>
+                          <div className="category-card-name">{category.name}</div>
+                          <div className="category-card-price" style={{ color: 'var(--text-faint)' }}>Launching soon</div>
+                        </div>
+                        <span className="category-card-arrow" style={{ background: 'var(--bg-alt)', color: 'var(--text-faint)' }}>🔔</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           )}
         </div>
