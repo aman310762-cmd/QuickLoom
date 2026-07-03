@@ -39,7 +39,7 @@ export default function CartPage() {
             <p style={{ color: 'var(--text-muted)', marginBottom: 24 }}>
               Browse our collections and add up to 10 items for a free home trial.
             </p>
-            <Link href="/categories/bedsheets" className="btn btn-primary btn-lg">Browse Products</Link>
+            <Link href="/products" className="btn btn-primary btn-lg">Browse Products</Link>
           </div>
         ) : (
           <div className="cart-layout">

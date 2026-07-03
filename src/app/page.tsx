@@ -116,7 +116,7 @@ export default function HomePage() {
             QuickLoom <strong>10 handloom products aapke ghar laata hai.</strong> Apne bed aur room mein dekhiye, fabric feel kariye, aur jo pasand aaye sirf uska payment kariye.
           </p>
           <div className="hero-actions">
-            <Link href="/categories/bedsheets" className="btn-pill btn-pill-accent btn-pill-lg hero-cta-main">
+            <Link href="/products" className="btn-pill btn-pill-accent btn-pill-lg hero-cta-main">
               Click here to add products
               <span aria-hidden="true">→</span>
             </Link>
@@ -331,13 +331,13 @@ export default function HomePage() {
           <h2>Room mein dekho. Phir decide karo.</h2>
           <p>10 favourites choose karke free home trial book kariye. Payment sirf uska jo aapke ghar mein perfect lage.</p>
           <div className="cta-buttons">
-            <Link href="/categories/bedsheets" className="btn-pill btn-pill-white">10 designs choose karein →</Link>
+            <Link href="/products" className="btn-pill btn-pill-white">10 designs choose karein →</Link>
             <a href={WHATSAPP_URL} className="btn-pill cta-whatsapp">WhatsApp us</a>
           </div>
         </div>
       </section>
 
-      <Link href="/categories/bedsheets" className="mobile-trial-cta">
+      <Link href="/products" className="mobile-trial-cta">
         Free home trial book karein <span aria-hidden="true">→</span>
       </Link>
     </div>

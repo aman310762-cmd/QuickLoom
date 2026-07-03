@@ -45,7 +45,7 @@ export function Navbar() {
   const links = [
     { href: '/', label: 'Home' },
     { href: '/how-it-works', label: 'How It Works' },
-    { href: '/categories/bedsheets', label: 'Products' },
+    { href: '/products', label: 'Products' },
     { href: '/contact', label: 'Contact' },
   ];
 
@@ -78,7 +78,7 @@ export function Navbar() {
             <span className="ql-nav-cart-text">Trial Cart</span>
             {cartCount > 0 && <span className="ql-nav-cart-badge">{cartCount}</span>}
           </Link>
-          <Link href="/categories/bedsheets" className="ql-nav-cta">
+          <Link href="/products" className="ql-nav-cta">
             Book Free Home Trial
           </Link>
           {/* Mobile hamburger button */}
@@ -116,7 +116,7 @@ export function Navbar() {
         <div className="ql-mobile-menu-footer">
           <span className="ql-mobile-location">📍 Serving Gurgaon & Bhiwadi</span>
           <Link
-            href="/categories/bedsheets"
+            href="/products"
             className="btn-pill btn-pill-accent"
             style={{ width: '100%', justifyContent: 'center', fontSize: 15, padding: '14px 20px' }}
             onClick={() => setMenuOpen(false)}

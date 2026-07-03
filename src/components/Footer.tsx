@@ -33,7 +33,7 @@ export function Footer() {
           <span className="ql-footer-col-label">Explore</span>
           <Link href="/" className="ql-footer-link">Home</Link>
           <Link href="/how-it-works" className="ql-footer-link">How It Works</Link>
-          <Link href="/categories/bedsheets" className="ql-footer-link">Products</Link>
+          <Link href="/products" className="ql-footer-link">Products</Link>
         </div>
 
         <div className="ql-footer-col">

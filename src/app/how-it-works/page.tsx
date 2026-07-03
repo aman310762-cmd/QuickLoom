@@ -40,7 +40,7 @@ export default function HowItWorksPage() {
             <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, maxWidth: 600 }}>
               Explore our curated collection of handloom textiles. Filter by category, color, size, and price. Add up to 10 items from any category to your trial cart — no commitment needed.
             </p>
-            <Link href="/categories/bedsheets" className="btn btn-primary" style={{ marginTop: 24 }}>
+            <Link href="/products" className="btn btn-primary" style={{ marginTop: 24 }}>
               Start Browsing <span className="material-symbols-outlined">arrow_forward</span>
             </Link>
           </div>
@@ -96,7 +96,7 @@ export default function HowItWorksPage() {
             <p style={{ opacity: 0.9, fontSize: 14, lineHeight: 1.6 }}>
               Start your free home trial today. No payment required upfront.
             </p>
-            <Link href="/categories/bedsheets" className="btn" style={{ marginTop: 24, background: 'white', color: 'var(--accent)', border: 'none' }}>
+            <Link href="/products" className="btn" style={{ marginTop: 24, background: 'white', color: 'var(--accent)', border: 'none' }}>
               Browse Collection
             </Link>
           </div>
