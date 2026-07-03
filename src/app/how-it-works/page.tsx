@@ -32,9 +32,9 @@ export default function HowItWorksPage() {
 
       {/* Steps */}
       <section style={{ maxWidth: 1240, margin: '0 auto', padding: '80px 32px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+        <div className="hiw-steps-grid">
           {/* Step 1 */}
-          <div className="ql-card" style={{ padding: 36, gridColumn: 'span 2', background: 'var(--bg-alt)', border: '1px solid var(--border)' }}>
+          <div className="ql-card hiw-step-full" style={{ padding: 36, background: 'var(--bg-alt)', border: '1px solid var(--border)' }}>
             <span className="section-label" style={{ color: 'var(--accent)' }}>Step 01</span>
             <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 24, marginTop: 8, marginBottom: 12 }}>Browse & Select Your Favorites</h3>
             <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, maxWidth: 600 }}>
@@ -112,7 +112,7 @@ export default function HowItWorksPage() {
             <p style={{ fontSize: 17, color: 'var(--text-muted)', marginTop: 8 }}>Straightforward answers and clear policies for a worry-free trial experience.</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: 48 }}>
+          <div className="hiw-faq-grid">
             <div>
               <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 20, marginBottom: 20 }}>Frequently Asked Questions</h3>
               {FAQ_DATA.map((item, i) => (

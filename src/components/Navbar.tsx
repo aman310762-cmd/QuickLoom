@@ -9,6 +9,7 @@ export function Navbar() {
   const pathname = usePathname();
   const [cartCount, setCartCount] = useState(0);
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     setCartCount(getCartCount());
@@ -23,6 +24,21 @@ export function Navbar() {
       window.removeEventListener('scroll', onScroll);
     };
   }, []);
+
+  // Close menu on route change
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
+  // Lock body scroll when menu is open
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [menuOpen]);
 
   if (pathname?.startsWith('/admin')) return null;
 
@@ -59,11 +75,53 @@ export function Navbar() {
           <span className="ql-nav-location">📍 Gurgaon · Bhiwadi</span>
           <Link href="/cart" className="ql-nav-cart">
             <span className="material-symbols-outlined" style={{ fontSize: 20 }}>shopping_bag</span>
-            Trial Cart
+            <span className="ql-nav-cart-text">Trial Cart</span>
             {cartCount > 0 && <span className="ql-nav-cart-badge">{cartCount}</span>}
           </Link>
           <Link href="/categories/bedsheets" className="ql-nav-cta">
             Book Free Home Trial
+          </Link>
+          {/* Mobile hamburger button */}
+          <button
+            className="ql-nav-hamburger"
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+          >
+            <span className={`hamburger-line ${menuOpen ? 'open' : ''}`} />
+            <span className={`hamburger-line ${menuOpen ? 'open' : ''}`} />
+            <span className={`hamburger-line ${menuOpen ? 'open' : ''}`} />
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      <div className={`ql-mobile-overlay ${menuOpen ? 'active' : ''}`} onClick={() => setMenuOpen(false)} />
+
+      {/* Mobile Menu Drawer */}
+      <div className={`ql-mobile-menu ${menuOpen ? 'active' : ''}`}>
+        <div className="ql-mobile-menu-links">
+          {links.map(l => (
+            <Link
+              key={l.href}
+              href={l.href}
+              className={`ql-mobile-link ${pathname === l.href ? 'active' : ''}`}
+              onClick={() => setMenuOpen(false)}
+            >
+              {l.label}
+              <span className="material-symbols-outlined" style={{ fontSize: 18, opacity: 0.4 }}>chevron_right</span>
+            </Link>
+          ))}
+        </div>
+        <div className="ql-mobile-menu-footer">
+          <span className="ql-mobile-location">📍 Serving Gurgaon & Bhiwadi</span>
+          <Link
+            href="/categories/bedsheets"
+            className="btn-pill btn-pill-accent"
+            style={{ width: '100%', justifyContent: 'center', fontSize: 15, padding: '14px 20px' }}
+            onClick={() => setMenuOpen(false)}
+          >
+            Book Free Home Trial →
           </Link>
         </div>
       </div>

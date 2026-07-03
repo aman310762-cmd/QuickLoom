@@ -353,7 +353,7 @@ export default function ProductDetailPage() {
         <div style={{ background: 'var(--bg-alt)', padding: '48px 0', borderTop: '1px solid var(--border)' }}>
           <div className="container">
             <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 24, marginBottom: 24 }}>You might also want to try these</h2>
-            <div className="products-grid" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+            <div className="products-grid similar-products-grid">
               {similar.map(p => {
                 const pHasImage = p.images && p.images.length > 0 && p.images[0];
                 return (

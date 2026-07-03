@@ -22,7 +22,7 @@ export default function ContactPage() {
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: 48 }}>
+        <div className="contact-grid">
           {/* Contact Info */}
           <div>
             {[
@@ -83,7 +83,7 @@ export default function ContactPage() {
                     <label className="form-label">Name</label>
                     <input className="form-input" type="text" placeholder="Your name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required />
                   </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                  <div className="form-grid-2col">
                     <div className="form-group">
                       <label className="form-label">Email</label>
                       <input className="form-input" type="email" placeholder="your@email.com" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} required />

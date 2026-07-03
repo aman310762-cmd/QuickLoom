@@ -70,7 +70,7 @@ export default function BookTrialPage() {
 
             <div className="book-trial-form-card">
               <form onSubmit={handleSubmit}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-lg)' }}>
+                <div className="form-grid-2col">
                   <div className="form-group">
                     <label className="form-label">Full Name</label>
                     <input
@@ -95,7 +95,7 @@ export default function BookTrialPage() {
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--space-lg)' }}>
+                <div className="form-grid-2col">
                   <div className="form-group">
                     <label className="form-label">City</label>
                     <select
