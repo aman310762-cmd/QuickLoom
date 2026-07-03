@@ -115,7 +115,7 @@ export default function HomePage() {
           </p>
           <div className="hero-actions">
             <Link href="/categories/bedsheets" className="btn-pill btn-pill-accent btn-pill-lg hero-cta-main">
-              👉 Abhi 10 products add karein
+              Click here to add products
               <span aria-hidden="true">→</span>
             </Link>
           </div>
@@ -149,7 +149,7 @@ export default function HomePage() {
 
       <div className="marquee-strip" aria-label="QuickLoom trial benefits">
         <div className="marquee-track">
-          {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, index) => (
+          {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS, ...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, index) => (
             <span key={`${item}-${index}`}>
               <span className="marquee-item">{item}</span>
               <span className="marquee-sep">✦</span>
